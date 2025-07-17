@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "workspaces": [
+    "apps/strapi-cms",
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "clean": "turbo run clean",
+    "compile": "turbo run compile",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "changeset": "changeset",
+    "version": "changeset version && npm i",
+    "tag": "changeset tag"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "husky": "^8.0.3",
+    "turbo": "^1.13.4"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "elliptic": "^6.6.1",
+    "koa": "^3.0.0"
+  }
+}

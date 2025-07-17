@@ -9,6 +9,16 @@ In this repository you can find anything you need to work on the developer porta
 
 ## Local development
 
+(Optional) First time set-up project or when there are changes to strapi collection:
+```bash
+npm run precompile -w strapi-cms 
+npm run compile -w strapi-cms 
+```
+
+Locally run strapi-cms:
+```bash
+npm run dev -w strapi-cms    
+```
 
 ### Populate strapi cms
 
