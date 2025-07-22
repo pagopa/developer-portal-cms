@@ -1,0 +1,34 @@
+name: Enrich Pull Request
+
+on:
+  pull_request:
+
+jobs:
+
+  add_labels:
+    name: Add labels
+    if: ${{ github.event.pull_request.title != vars.CHANGESET_PR_TITLE }}
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add size label to PR
+        uses: pagopa/github-actions-template/check-pr-size@d91a1fd0b913c9830589be5d86cdb71c90813fae # v1.5.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ignored_files: 'package-lock.json'
+          min_size: 200
+          max_size: 800
+
+  add_assignee:
+    name: Add assignee
+    needs: add_labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign PR
+        uses: kentaro-m/auto-assign-action@3e986bf9c274729de0d85191da42484917883328 # v1.2.5
+        with:
+          configuration-path: '.github/auto-assign.yaml'
