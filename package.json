@@ -5,7 +5,6 @@
     "packages/*"
   ],
   "scripts": {
-    "prepare": "husky install",
     "clean": "turbo run clean",
     "compile": "turbo run compile",
     "dev": "turbo run dev",
@@ -17,7 +16,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
-    "husky": "^8.0.3",
     "turbo": "^1.13.4"
   },
   "dependencies": {

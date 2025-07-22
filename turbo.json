@@ -12,23 +12,13 @@
     },
     "build": {
       "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**"
+        "dist/**"
       ]
     },
     "dev": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["compile"]
-    },
-    "lint": {
-    },
-    "test": {
-      "outputs": ["coverage/**"]
-    },
-    "storybook": {
-      "cache": false
     }
   }
 }
