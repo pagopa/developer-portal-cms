@@ -25,6 +25,8 @@ jobs:
   add_assignee:
     name: Add assignee
     needs: add_labels
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
