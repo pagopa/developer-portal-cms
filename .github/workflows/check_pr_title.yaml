@@ -1,5 +1,8 @@
 name: Check PR title
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     # Ignore Changeset PRs
