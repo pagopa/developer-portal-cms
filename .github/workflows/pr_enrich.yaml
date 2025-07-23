@@ -20,6 +20,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yaml
           sync-labels: true
+          dot: false
 
       - name: Add size label to PR
         uses: pagopa/github-actions-template/check-pr-size@d91a1fd0b913c9830589be5d86cdb71c90813fae # v1.5.4
