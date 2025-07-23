@@ -1,12 +1,39 @@
-packages:
-  - packages/**/*
+# Add 'root' label to any root file changes
+# Quotation marks are required for the leading asterisk
+root:
+- changed-files:
+  - any-glob-to-any-file: '*'
+
+# Add 'Documentation' label to any changes within 'docs' folder or any subfolders
 docs:
-  - docs/**/*
+- changed-files:
+  - any-glob-to-any-file: docs/**
+  - any-glob-to-any-file: '**/*.md'
+
+
+# Add 'release' label to any PR that is opened against the `main` branch
+release:
+ - base-branch: 'main'
+
+# packages
+
+packages:
+- changed-files:
+  - any-glob-to-any-file: packages/**
+
 workflows:
-  - .github/workflows/**/*
+- changed-files:
+  - any-glob-to-any-file: .github/workflows/**
+  
 infra:
-  - apps/infrastructure/**/*
+- changed-files:
+  - any-glob-to-any-file: apps/infrastructure/**
+  
 changeset:
-  - .changeset/**/*
+- changed-files:
+  - any-glob-to-any-file: .changeset/**
+
 cms:
-  - apps/strapi-cms/**/*
+- changed-files:
+  - any-glob-to-any-file: apps/cms/**
+  
