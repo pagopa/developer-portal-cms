@@ -1,0 +1,6 @@
+packages: packages/**/*
+docs: docs/**/*
+workflows: .github/workflows/**/*
+infra: apps/infrastructure/**/*
+changeset: .changeset/**/*
+cms: apps/strapi-cms/**/*
