@@ -1,0 +1,41 @@
+name: Enrich Pull Request
+
+on:
+  pull_request:
+
+jobs:
+
+  add_labels:
+    name: Add labels
+    if: github.event.pull_request.title != ${{ vars.CHANGESET_PR_TITLE }}
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add labels to PR
+        uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}          
+          sync-labels: true
+          dot: false
+
+      - name: Add size label to PR
+        uses: pagopa/github-actions-template/check-pr-size@d91a1fd0b913c9830589be5d86cdb71c90813fae # v1.5.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ignored_files: 'package-lock.json, apps/infrastructure/src/.terraform.lock.hcl'
+          min_size: 200
+          max_size: 800
+
+  add_assignee:
+    name: Add assignee
+    needs: add_labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign PR
+        uses: kentaro-m/auto-assign-action@f4648c0a9fdb753479e9e75fc251f507ce17bb7e # v2.0.0
+        with:
+          configuration-path: '.github/auto-assign.yaml'
