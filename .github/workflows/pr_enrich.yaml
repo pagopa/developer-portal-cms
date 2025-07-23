@@ -9,7 +9,7 @@ jobs:
     name: Add labels
     if: github.event.pull_request.title != ${{ vars.CHANGESET_PR_TITLE }}
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     runs-on: ubuntu-latest
 
