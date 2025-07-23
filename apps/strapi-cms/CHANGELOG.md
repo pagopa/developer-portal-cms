@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 3.9.0
+
+### Minor Changes
+
+- 49de579: Add header image to webinars in cms
+
 ## 3.8.0
 
 ### Minor Changes
