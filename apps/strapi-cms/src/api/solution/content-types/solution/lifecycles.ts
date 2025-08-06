@@ -1,9 +1,18 @@
 import axios from 'axios';
-import {
-  IEventWithProduct,
-  validateAssociatedProductPresenceOnCreate,
-  validateAssociatedProductPresenceOnUpdate,
-} from '../../../../utils/validateProductPresence';
+
+
+interface ISolution {
+  readonly id?: string;
+}
+
+interface ISolutionEvent {
+  readonly params: {
+    readonly data: ISolution;
+    readonly where?: {
+      readonly id?: string;
+    };
+  };
+}
 
 const triggerGithubWorkflow = async () => {
   try {
@@ -21,7 +30,7 @@ const triggerGithubWorkflow = async () => {
         ref: 'main',
         inputs: {
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
-          metadata_type: 'release-notes',
+          metadata_type: 'solutions',
           generate_metadata_only: 'false',
           incremental_mode: 'false'
         }
@@ -43,26 +52,20 @@ const triggerGithubWorkflow = async () => {
     }
   } catch (error) {
     console.error('Error triggering GitHub workflow:', error);
-    // Don't throw the error to avoid breaking the release note creation/update
+    // Don't throw the error to avoid breaking the solution creation/update
   }
 };
 
 module.exports = {
-  beforeCreate(event: IEventWithProduct) {
-    validateAssociatedProductPresenceOnCreate(event);
-  },
-  beforeUpdate(event: IEventWithProduct) {
-    validateAssociatedProductPresenceOnUpdate(event);
-  },
-  async afterCreate(event: IEventWithProduct) {
-    console.log('Release note created, triggering GitHub workflow...');
+  async afterCreate(event: ISolutionEvent) {
+    console.log('Solution created, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
     triggerGithubWorkflow().catch(error => 
       console.error('Failed to trigger workflow after create:', error)
     );
   },
-  async afterUpdate(event: IEventWithProduct) {
-    console.log('Release note updated, triggering GitHub workflow...');
+  async afterUpdate(event: ISolutionEvent) {
+    console.log('Solution updated, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
     triggerGithubWorkflow().catch(error => 
       console.error('Failed to trigger workflow after update:', error)
