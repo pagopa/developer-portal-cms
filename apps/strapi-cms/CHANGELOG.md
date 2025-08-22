@@ -1,5 +1,15 @@
 # strapi-cms
 
+## 3.10.0
+
+### Minor Changes
+
+- 56f0b5b: Remove apiSoapUrl attribute from ApiData schema
+
+### Patch Changes
+
+- 1bdfc53: Update strapi version to 4.25.22
+
 ## 3.9.0
 
 ### Minor Changes
