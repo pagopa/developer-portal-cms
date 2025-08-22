@@ -1,51 +1,10 @@
-import axios from 'axios';
 import {
   IEventWithProduct,
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate,
 } from '../../../../utils/validateProductPresence';
+import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
-const triggerGithubWorkflow = async () => {
-  try {
-    const githubPat = process.env.GITHUB_PAT;
-    if (!githubPat) {
-      console.warn('GITHUB_PAT not configured - skipping workflow trigger');
-      return;
-    }
-
-    console.log('Triggering GitHub workflow...');
-    
-    const response = await axios.post(
-      'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
-      {
-        ref: 'main',
-        inputs: {
-          environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
-          metadata_type: 'release-notes',
-          generate_metadata_only: 'false',
-          incremental_mode: 'false'
-        }
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${githubPat}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json',
-          'User-Agent': 'Strapi-CMS-Webhook'
-        }
-      }
-    );
-
-    if (response.status === 204) {
-      console.log('GitHub workflow triggered successfully');
-    } else {
-      console.error('Failed to trigger GitHub workflow:', response.status, response.data);
-    }
-  } catch (error) {
-    console.error('Error triggering GitHub workflow:', error);
-    // Don't throw the error to avoid breaking the release note creation/update
-  }
-};
 
 module.exports = {
   beforeCreate(event: IEventWithProduct) {
@@ -57,14 +16,14 @@ module.exports = {
   async afterCreate(event: IEventWithProduct) {
     console.log('Release note created, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
-    triggerGithubWorkflow().catch(error => 
+    triggerGithubWorkflow('release-notes').catch(error => 
       console.error('Failed to trigger workflow after create:', error)
     );
   },
   async afterUpdate(event: IEventWithProduct) {
     console.log('Release note updated, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
-    triggerGithubWorkflow().catch(error => 
+    triggerGithubWorkflow('release-notes').catch(error => 
       console.error('Failed to trigger workflow after update:', error)
     );
   },
