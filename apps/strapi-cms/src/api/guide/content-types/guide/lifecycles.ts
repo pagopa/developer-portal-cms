@@ -1,4 +1,5 @@
 import { errors } from '@strapi/utils';
+import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface IGuide {
   readonly versions?: Array<{
@@ -41,11 +42,26 @@ const validateGuideVersions = async (event: IGuideEvent) => {
   return true;
 };
 
+
 module.exports = {
   async beforeCreate(event: IGuideEvent) {
     await validateGuideVersions(event);
   },
   async beforeUpdate(event: IGuideEvent) {
     await validateGuideVersions(event);
+  },
+  async afterCreate(event: IGuideEvent) {
+    console.log('Guide created, triggering GitHub workflow...');
+    // Fire and forget - don't block the UI
+    triggerGithubWorkflow('guides').catch(error => 
+      console.error('Failed to trigger workflow after create:', error)
+    );
+  },
+  async afterUpdate(event: IGuideEvent) {
+    console.log('Guide updated, triggering GitHub workflow...');
+    // Fire and forget - don't block the UI
+    triggerGithubWorkflow('guides').catch(error => 
+      console.error('Failed to trigger workflow after update:', error)
+    );
   },
 };
