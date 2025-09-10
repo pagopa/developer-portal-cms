@@ -1,5 +1,16 @@
 # strapi-cms
 
+## 3.11.0
+
+### Minor Changes
+
+- 85e761a: Add GitHub workflow sync triggers to lifecycle hooks for guides, solutions, and release notes. When content is created or updated, it automatically triggers the sync workflow to keep the developer portal up to date.
+
+### Patch Changes
+
+- ad7a2c4: Fix error and improve getting started instructions in README
+- 78f0b3e: Change node image in Dockerfile to be architecture agnostic
+
 ## 3.10.0
 
 ### Minor Changes
