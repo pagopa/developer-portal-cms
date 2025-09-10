@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:18.18.0-alpine
+ARG NODE_IMAGE=node:18.18.0-alpine@sha256:a0b787b0d53feacfa6d606fb555e0dbfebab30573277f1fe25148b05b66fa097
 
 # Creating multi-stage build for production
 FROM ${NODE_IMAGE} AS build
