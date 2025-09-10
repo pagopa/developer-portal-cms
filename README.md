@@ -12,7 +12,7 @@ In this repository you can find anything you need to work on the developer porta
 (Optional) First time set-up project or when there are changes to strapi collection:
 ```bash
 npm run precompile -w strapi-cms 
-npm run compile -w strapi-cms 
+npm run compile 
 ```
 
 Locally run strapi-cms:
@@ -22,15 +22,7 @@ npm run dev -w strapi-cms
 
 ### Populate strapi cms
 
-In order to start with a populated strapi database, run the following command:
-``` bash
-npx strapi transfer --from https://cms.developer.pagopa.it/admin --from-token <strapi_token>
-```
-
-The strapi token can be recovered by a mantainer with admin access to the production cms
-
-Give that SQLite is used for local developement, this transfer will require the following lines to be added to `apps/strapi-cms/config/database.ts` inside the `sqlite` object:
-
+To use SQLite for local development, add the following configuration to the `sqlite` object in `apps/strapi-cms/config/database.ts` to ensure the transfer completes successfully:
 ```
       pool: {
         min: 2,
@@ -44,6 +36,17 @@ Give that SQLite is used for local developement, this transfer will require the 
       },
       debug: false,
 ```
+Make sure to add the following two lines to your local `.env` file before starting strapi-cms:
+``` bash
+DATABASE_CLIENT=sqlite
+DATABASE_FILENAME=.tmp/data.db
+```
+
+Run the following command to start the trasfer and populate the database:
+``` bash
+npx strapi transfer --from https://cms.developer.pagopa.it/admin --from-token <strapi_token>
+```
+The strapi token can be recovered by a mantainer with admin access to the production cms
 
 **Important**: remember to remove these lines after the transfer, before launching Strapi.
 
