@@ -36,19 +36,20 @@ To use SQLite for local development, add the following configuration to the `sql
       },
       debug: false,
 ```
+**Important**: remember to remove these lines after the transfer, before launching Strapi.
+
+Run the following command to start the trasfer and populate the database:
+``` bash
+cd apps/strapi-cms
+npx strapi transfer --from https://cms.developer.pagopa.it/admin --from-token <strapi_token>
+```
+The strapi token can be recovered by a mantainer with admin access to the production cms
+
 Make sure to add the following two lines to your local `.env` file before starting strapi-cms:
 ``` bash
 DATABASE_CLIENT=sqlite
 DATABASE_FILENAME=.tmp/data.db
 ```
-
-Run the following command to start the trasfer and populate the database:
-``` bash
-npx strapi transfer --from https://cms.developer.pagopa.it/admin --from-token <strapi_token>
-```
-The strapi token can be recovered by a mantainer with admin access to the production cms
-
-**Important**: remember to remove these lines after the transfer, before launching Strapi.
 
 ### Run Strapi CMS with Docker
 
