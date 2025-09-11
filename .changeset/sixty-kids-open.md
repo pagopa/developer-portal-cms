@@ -2,4 +2,4 @@
 "strapi-cms": patch
 ---
 
-Add ckeditorhtml
+Create the CkEditorHtml component and add it to the tutorial parts
