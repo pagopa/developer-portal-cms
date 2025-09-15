@@ -60,8 +60,7 @@
         "parts.alert",
         "parts.code-block",
         "parts.embed-html",
-        "parts.html",
-        "parts.ck-editor"
+        "parts.html"
       ],
       "required": true
     },

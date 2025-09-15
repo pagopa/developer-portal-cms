@@ -15,7 +15,6 @@
     "prune:strapi": "turbo prune --scope=strapi-cms --docker && mv -f ../../out/package-lock.json . && rm -R ../../out/"
   },
   "dependencies": {
-    "@ckeditor/strapi-plugin-ckeditor": "^0.0.13",
     "@strapi/plugin-i18n": "4.25.22",
     "@strapi/plugin-seo": "^1.9.8",
     "@strapi/plugin-users-permissions": "4.25.22",
