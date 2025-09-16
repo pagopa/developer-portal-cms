@@ -18,10 +18,10 @@ module.exports = {
     console.log(`Found ${oldComponents.length} components 'parts.ck-editor' to migrate.`);
 
     // Iterate over each found component
-    for (const link of oldComponents) {
+    for (const component of oldComponents) {
       // Old component ID and tutorial ID
-      const oldComponentId = link.component_id;
-      const tutorialId = link.entity_id;
+      const oldComponentId = component.component_id;
+      const tutorialId = component.entity_id;
 
       // Get the content of the old component from 'components_parts_ck_editors' table.
       const oldComponentContent = await knex('components_parts_ck_editors')
@@ -49,7 +49,7 @@ module.exports = {
       // Update the linking table to point to the new component.
       // Change the component_type to 'parts.ck-editor-html'
       await knex('tutorials_components')
-        .where({ id: link.id })
+        .where({ id: component.id })
         .update({
           component_type: 'parts.ck-editor-html',
           component_id: newComponentId,
