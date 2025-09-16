@@ -34,7 +34,7 @@ module.exports = {
         continue;
       }
 
-      //Create a new entry in 'components_parts_ck_editor_htmls' table
+      // Create a new entry in 'components_parts_ck_editor_htmls' table
       // with the content copied from the old component.
       // `returning('id')` gives us the ID of the newly created row.
       const [newComponent] = await knex('components_parts_ck_editor_htmls')
