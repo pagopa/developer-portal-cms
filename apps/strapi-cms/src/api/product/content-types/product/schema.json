@@ -112,6 +112,11 @@
       "relation": "oneToOne",
       "target": "api::release-note.release-note",
       "inversedBy": "product"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tag.tag"
     }
   }
 }
