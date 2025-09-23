@@ -4,7 +4,8 @@
   "info": {
     "singularName": "tutorial-list-page",
     "pluralName": "tutorial-list-pages",
-    "displayName": "TutorialListPage"
+    "displayName": "TutorialListPage",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -64,6 +65,15 @@
         }
       },
       "component": "shared.seo"
+    },
+    "enableFilters": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean",
+      "default": false
     }
   }
 }
