@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_parts_markdowns",
+  "info": {
+    "displayName": "Markdown"
+  },
+  "options": {},
+  "attributes": {
+    "dirName": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
