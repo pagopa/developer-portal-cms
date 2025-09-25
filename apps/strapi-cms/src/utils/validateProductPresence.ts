@@ -1,6 +1,6 @@
 import { errors } from '@strapi/utils';
 
-const validatorsAreDisabled = process.env.DISABLE_CUSTOM_VALIDATORS === 'True';
+const validatorsAreDisabled = true;
 
 export interface IEventWithProduct {
   readonly params: {
