@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "link": {
       "type": "component",
@@ -34,7 +34,7 @@
         }
       },
       "component": "common.link",
-      "required": true
+      "required": false
     },
     "image": {
       "type": "media",

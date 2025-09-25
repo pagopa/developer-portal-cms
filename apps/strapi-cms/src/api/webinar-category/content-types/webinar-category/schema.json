@@ -23,13 +23,13 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true
     },
     "icon": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ],

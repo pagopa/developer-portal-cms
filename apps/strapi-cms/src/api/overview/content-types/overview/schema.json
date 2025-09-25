@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "subtitle": {
       "pluginOptions": {
@@ -32,12 +32,12 @@
         }
       },
       "type": "text",
-      "required": true
+      "required": false
     },
     "backgroundImage": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ],

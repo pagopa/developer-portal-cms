@@ -23,12 +23,12 @@
           "localized": true
         }
       },
-      "required": true
+      "required": false
     },
     "coverImage": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ],
@@ -45,7 +45,7 @@
           "localized": true
         }
       },
-      "required": true,
+      "required": false,
       "regex": "^[a-zA-Z0-9-]+$",
       "unique": true
     },
@@ -94,7 +94,7 @@
           "localized": true
         }
       },
-      "required": true
+      "required": false
     },
     "relatedLinks": {
       "type": "component",
@@ -121,7 +121,7 @@
         }
       },
       "type": "text",
-      "required": true
+      "required": false
     },
     "solutions": {
       "type": "relation",

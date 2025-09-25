@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "anchor": {
       "pluginOptions": {
@@ -32,7 +32,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "parts": {
       "pluginOptions": {
@@ -48,7 +48,7 @@
         "parts.api-tester",
         "parts.embed-html"
       ],
-      "required": true
+      "required": false
     },
     "quickstartGuide": {
       "type": "relation",

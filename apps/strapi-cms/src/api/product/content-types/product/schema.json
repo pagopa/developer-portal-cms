@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true
     },
     "slug": {
@@ -33,7 +33,7 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
@@ -44,7 +44,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "description": {
       "pluginOptions": {
@@ -57,7 +57,7 @@
     "logo": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ],

@@ -23,14 +23,14 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
     "icon": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ],
@@ -47,7 +47,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "title": {
       "pluginOptions": {
@@ -56,7 +56,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "description": {
       "pluginOptions": {
@@ -94,7 +94,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "landingUseCaseFile": {
       "pluginOptions": {
@@ -103,7 +103,7 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "default": "README.md"
     },
     "stats": {

@@ -43,7 +43,7 @@
         }
       },
       "type": "text",
-      "required": true
+      "required": false
     },
     "seo": {
       "type": "component",

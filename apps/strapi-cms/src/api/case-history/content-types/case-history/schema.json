@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
@@ -34,7 +34,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "description": {
       "pluginOptions": {
@@ -77,7 +77,7 @@
         "parts.html",
         "parts.quote"
       ],
-      "required": true
+      "required": false
     },
     "seo": {
       "type": "component",

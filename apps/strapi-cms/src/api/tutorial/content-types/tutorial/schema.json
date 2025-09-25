@@ -23,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "slug": {
       "pluginOptions": {
@@ -32,7 +32,7 @@
         }
       },
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
@@ -63,7 +63,7 @@
         "parts.html",
         "parts.ck-editor"
       ],
-      "required": true
+      "required": false
     },
     "product": {
       "type": "relation",
