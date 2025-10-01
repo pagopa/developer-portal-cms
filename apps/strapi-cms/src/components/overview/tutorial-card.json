@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_overview_tutorial_cards",
+  "info": {
+    "displayName": "tutorialCard",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "tutorial": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tutorial.tutorial"
+    }
+  }
+}

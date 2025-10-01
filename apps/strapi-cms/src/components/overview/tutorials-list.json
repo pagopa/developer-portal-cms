@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_overview_tutorials_lists",
+  "info": {
+    "displayName": "tutorialsList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "tutorialCard": {
+      "displayName": "tutorialCard",
+      "type": "component",
+      "repeatable": true,
+      "component": "overview.tutorial-card"
+    }
+  }
+}
