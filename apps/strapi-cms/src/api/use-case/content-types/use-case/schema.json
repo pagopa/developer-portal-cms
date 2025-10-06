@@ -1,6 +1,6 @@
 {
   "kind": "collectionType",
-  "collectionName": "use_case",
+  "collectionName": "use_cases",
   "info": {
     "singularName": "use-case",
     "pluralName": "use-cases",
