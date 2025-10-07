@@ -101,6 +101,12 @@
       "target": "api::tutorial-list-page.tutorial-list-page",
       "mappedBy": "product"
     },
+    "use_case_list_page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::use-case-list-page.use-case-list-page",
+      "mappedBy": "product"
+    },
     "guide_list_page": {
       "type": "relation",
       "relation": "oneToOne",
