@@ -42,7 +42,6 @@ const validateGuideVersions = async (event: IGuideEvent) => {
   return true;
 };
 
-
 module.exports = {
   async beforeCreate(event: IGuideEvent) {
     await validateGuideVersions(event);
