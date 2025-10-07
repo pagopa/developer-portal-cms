@@ -4,9 +4,9 @@ type MetadataType = 'guides' | 'release-notes' | 'solutions';
 
 export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
   try {
-    const githubPat = process.env.GITHUB_PAT;
+    const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
-      console.warn('GITHUB_PAT not configured - skipping workflow trigger');
+      console.warn('GITHUB_PERSONAL_ACCESS_TOKEN not configured - skipping workflow trigger');
       return;
     }
 
