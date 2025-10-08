@@ -1,5 +1,5 @@
 /**
- * tutorial router
+ * use-case router
  */
 
 import { factories } from '@strapi/strapi';
