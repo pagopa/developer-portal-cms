@@ -1,5 +1,5 @@
 /**
- * tutorial controller
+ * use-case controller
  */
 
 import { factories } from '@strapi/strapi';

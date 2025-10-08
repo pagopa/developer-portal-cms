@@ -1,5 +1,5 @@
 /**
- * tutorial service
+ * use-case service
  */
 
 import { factories } from '@strapi/strapi';
