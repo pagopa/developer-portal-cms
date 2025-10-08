@@ -1,5 +1,5 @@
 /**
- * tutorial-list-page service
+ * use-case-list-page service
  */
 
 import { factories } from '@strapi/strapi';
