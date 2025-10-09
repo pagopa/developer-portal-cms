@@ -38,9 +38,7 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "images"
-      ],
+      "allowedTypes": ["images"],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -82,6 +80,16 @@
         }
       },
       "component": "overview.tutorial-section"
+    },
+    "useCaseSection": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "overview.use-case-section"
     },
     "postIntegration": {
       "type": "component",

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_overview_use_case_sections",
+  "info": {
+    "displayName": "UseCaseSection",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "useCases": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::use-case.use-case"
+    }
+  }
+}
