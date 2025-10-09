@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 3.11.1
+
+### Patch Changes
+
+- 5c560f3: Fix environment variable name and remove ghost code
+
 ## 3.11.0
 
 ### Minor Changes
