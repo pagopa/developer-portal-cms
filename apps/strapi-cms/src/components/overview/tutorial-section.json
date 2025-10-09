@@ -20,7 +20,7 @@
       "relation": "oneToMany",
       "target": "api::tutorial.tutorial"
     },
-    "showNewLayout": {
+    "showCardsLayout": {
       "type": "boolean",
       "default": false
     }
