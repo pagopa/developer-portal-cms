@@ -1,5 +1,20 @@
 # strapi-cms
 
+## 4.0.0
+
+### Major Changes
+
+- 09dfd07: Add use case section component to overview
+
+### Minor Changes
+
+- 37efb9f: Add Markdown part to UseCases
+- 639a70a: Edit tutorials and tutorial section in overview to show new layout
+- 50d5b8f: Add new type: UseCase
+- 891993d: Add Markdown part to CMS and tutorials
+- 085c234: Add subtitle field to use-case
+- 12a5f58: Implement new type use-case-list-page and add use-case-list-page attribute to product type
+
 ## 3.11.1
 
 ### Patch Changes
