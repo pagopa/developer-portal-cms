@@ -20,7 +20,7 @@ export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
           generate_metadata_only: 'false',
-          incremental_mode: 'false'
+          incremental_mode: 'true'
         }
       },
       {
