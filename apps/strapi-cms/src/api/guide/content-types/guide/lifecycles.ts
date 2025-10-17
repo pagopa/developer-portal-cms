@@ -2,6 +2,7 @@ import { errors } from '@strapi/utils';
 import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface IGuide {
+  readonly publishedAt?: string | null;
   readonly versions?: Array<{
     id: number;
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -49,14 +50,12 @@ module.exports = {
   async beforeUpdate(event: IGuideEvent) {
     await validateGuideVersions(event);
   },
-  async afterCreate(event: IGuideEvent) {
-    console.log('Guide created, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('guides').catch(error => 
-      console.error('Failed to trigger workflow after create:', error)
-    );
-  },
   async afterUpdate(event: IGuideEvent) {
+    if (event.params.data.publishedAt === undefined) {
+      console.log('Guide not published, skipping GitHub workflow trigger');
+      return;
+    }
+
     console.log('Guide updated, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
     triggerGithubWorkflow('guides').catch(error => 
