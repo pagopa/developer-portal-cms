@@ -2,4 +2,4 @@
 "strapi-cms": patch
 ---
 
-Activate incemental mode
+Enable incremental mode for the GitHub workflow trigger used in documentation synchronization.
