@@ -2,6 +2,7 @@ import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface ISolution {
   readonly id?: string;
+  readonly publishedAt?: string | null;
 }
 
 interface ISolutionEvent {
@@ -14,14 +15,12 @@ interface ISolutionEvent {
 }
 
 module.exports = {
-  async afterCreate(event: ISolutionEvent) {
-    console.log('Solution created, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('solutions').catch(error =>
-      console.error('Failed to trigger workflow after create:', error)
-    );
-  },
   async afterUpdate(event: ISolutionEvent) {
+    if (event.params.data.publishedAt === undefined) {
+      console.log('Solution not published, skipping GitHub workflow trigger');
+      return;
+    }
+
     console.log('Solution updated, triggering GitHub workflow...');
     // Fire and forget - don't block the UI
     triggerGithubWorkflow('solutions').catch(error =>

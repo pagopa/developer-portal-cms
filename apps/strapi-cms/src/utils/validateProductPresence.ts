@@ -13,6 +13,7 @@ export interface IEventWithProduct {
           readonly id: string;
         }>;
       };
+      readonly publishedAt?: string | null;
     };
     readonly where?: {
       readonly id?: string;
