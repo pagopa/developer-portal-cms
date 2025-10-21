@@ -1,5 +1,16 @@
 # strapi-cms
 
+## 4.1.0
+
+### Minor Changes
+
+- 052e553: Add flag isVisible to Product
+
+### Patch Changes
+
+- a9fe0ff: Enable incremental mode for the GitHub workflow trigger used for documentation synchronization
+- e107a88: Remove GitHub workflow trigger on afterCreate event and add guard to skip GitHub workflow trigger activation on unpublished entities
+
 ## 4.0.0
 
 ### Major Changes
