@@ -22,7 +22,7 @@ interface IGuideEvent {
 const validateGuideVersions = async (event: IGuideEvent) => {
   const { data } = event.params;
 
-  if (data.versions && Array.isArray(data.versions)) {
+  if (data.versions && Array.isArray(data.versions) && data.versions.length > 0) {
     const versionIds = data.versions.map((v) => v.id);
 
     // Fetch the full version data
@@ -33,9 +33,15 @@ const validateGuideVersions = async (event: IGuideEvent) => {
 
     const mainVersions = versions.filter((version) => version.main === 1);
 
+    if (mainVersions.length === 0) {
+      throw new errors.ApplicationError(
+        'A guide with versions must have exactly one version marked as main'
+      );
+    }
+
     if (mainVersions.length > 1) {
       throw new errors.ApplicationError(
-        'Only one version can have main set to true'
+        'A guide can have only one version marked as main'
       );
     }
   }
