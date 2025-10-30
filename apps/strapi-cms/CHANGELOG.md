@@ -1,5 +1,15 @@
 # strapi-cms
 
+## 4.2.0
+
+### Minor Changes
+
+- b6c85e9: Add a check in validateGuideVersion to verify that at least one version marked as main exists
+
+### Patch Changes
+
+- 7698e05: Update axios package from 1.6.0 to 1.12.0 and koa package from 3.0.0 to 3.0.1
+
 ## 4.1.0
 
 ### Minor Changes
