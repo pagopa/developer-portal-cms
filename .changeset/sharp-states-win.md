@@ -2,4 +2,4 @@
 "strapi-cms": minor
 ---
 
-Add a check in validateGuideVersion to verify that al lest one version marked as main exists
+Add a check in validateGuideVersion to verify that at least one version marked as main exists
