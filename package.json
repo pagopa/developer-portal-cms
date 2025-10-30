@@ -21,6 +21,6 @@
   "dependencies": {
     "crypto-js": "^4.2.0",
     "elliptic": "^6.6.1",
-    "koa": "^3.0.0"
+    "koa": "^3.0.1"
   }
 }
