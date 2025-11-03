@@ -31,7 +31,7 @@ const validateGuideVersions = async (event: IGuideEvent) => {
       .from(`components_common_guide_versions`)
       .whereIn('id', versionIds);
 
-    const mainVersions = versions.filter((version) => version.main === 1);
+    const mainVersions = versions.filter((version) => !!version.main);
 
     if (mainVersions.length === 0) {
       throw new errors.ApplicationError(
