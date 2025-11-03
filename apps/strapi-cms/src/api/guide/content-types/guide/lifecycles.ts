@@ -30,12 +30,12 @@ const validateGuideVersions = async (event: IGuideEvent) => {
       .select('*')
       .from(`components_common_guide_versions`)
       .whereIn('id', versionIds);
-
-    const mainVersions = versions.filter((version) => version.main === 1);
+      
+    const mainVersions = versions.filter((version) => !!version.main);
 
     if (mainVersions.length === 0) {
       throw new errors.ApplicationError(
-        `A guide with versions must have exactly one version marked as main: #mainVersions ${mainVersions.length}, versions: ${JSON.stringify(versions.map(v => ({id: v.id, main: v.main})))}}`
+        'A guide with versions must have exactly one version marked as main'
       );
     }
 
