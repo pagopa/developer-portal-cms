@@ -30,7 +30,7 @@ const validateGuideVersions = async (event: IGuideEvent) => {
       .select('*')
       .from(`components_common_guide_versions`)
       .whereIn('id', versionIds);
-      
+
     const mainVersions = versions.filter((version) => !!version.main);
 
     if (mainVersions.length === 0) {
