@@ -64,6 +64,15 @@
         }
       },
       "component": "shared.seo"
+    },
+    "enableFilters": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean",
+      "default": false
     }
   }
 }
