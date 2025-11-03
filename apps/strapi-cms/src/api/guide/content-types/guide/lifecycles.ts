@@ -35,7 +35,7 @@ const validateGuideVersions = async (event: IGuideEvent) => {
 
     if (mainVersions.length === 0) {
       throw new errors.ApplicationError(
-        'A guide with versions must have exactly one version marked as main'
+        `A guide with versions must have exactly one version marked as main: #mainVersions ${mainVersions.length}, versions: ${JSON.stringify(versions.map(v => ({id: v.id, main: v.main})))}}`
       );
     }
 
