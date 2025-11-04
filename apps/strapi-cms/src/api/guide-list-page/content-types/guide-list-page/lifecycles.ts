@@ -15,12 +15,12 @@ module.exports = {
   async afterUpdate(event: IEventWithProduct) {
       if (event.params.data.publishedAt === undefined) {
         console.log(
-          'Release note not published, skipping GitHub workflow trigger'
+          'GuideListPage not published, skipping GitHub workflow trigger'
         );
         return;
       }
   
-      console.log('Release note updated, triggering GitHub workflow...');
+      console.log('GuideListPage updated, triggering GitHub workflow...');
       // Fire and forget - don't block the UI
       triggerGithubWorkflow('guides').catch(error => 
         console.error('Failed to trigger workflow after update:', error)
