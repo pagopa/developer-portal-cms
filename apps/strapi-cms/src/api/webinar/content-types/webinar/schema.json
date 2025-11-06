@@ -165,6 +165,19 @@
       "target": "api::webinar-category.webinar-category"
     },
     "headerImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "playerCoverImage": {
       "allowedTypes": [
         "images"
       ],
