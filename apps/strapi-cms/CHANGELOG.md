@@ -1,5 +1,17 @@
 # strapi-cms
 
+## 4.3.0
+
+### Minor Changes
+
+- 085884a: Add flag to enable filters in ApiDataList
+- 974acd8: Add tags attribute to ApiData schema
+
+### Patch Changes
+
+- 3a397df: Add playerCoverImage to webinars
+- 36ecb8a: Fix check for mainVersions to be valid for booleans and integers
+
 ## 4.2.0
 
 ### Minor Changes
