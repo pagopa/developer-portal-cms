@@ -2,7 +2,10 @@ import axios from 'axios';
 
 type MetadataType = 'guides' | 'release-notes' | 'solutions';
 
-export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
+export const triggerGithubWorkflow = async (
+  metadataType: MetadataType,
+  dirNames?: string[]
+) => {
   try {
     const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
@@ -10,17 +13,25 @@ export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
       return;
     }
 
-    console.log('🚀 Triggering GitHub workflow...');
-    
+    const dirNamesFilter = dirNames && dirNames.length > 0 ? dirNames.join(',') : '';
+
+    console.log('Triggering GitHub workflow...');
+    if (dirNamesFilter) {
+      console.log(`   Syncing specific directories: ${dirNamesFilter}`);
+    } else {
+      console.log('   Syncing all directories');
+    }
+
     const response = await axios.post(
-      'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
+      'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs_optimized.yaml/dispatches',
       {
         ref: 'main',
         inputs: {
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
           generate_metadata_only: 'false',
-          incremental_mode: 'true'
+          incremental_mode: 'true',
+          dir_names_filter: dirNamesFilter
         }
       },
       {
