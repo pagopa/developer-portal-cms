@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.4.0
+
+### Minor Changes
+
+- 2f58049: Remove unused plugin from strapi cms
+
 ## 4.3.0
 
 ### Minor Changes
