@@ -19,6 +19,19 @@ interface IGuideEvent {
   };
 }
 
+const onPublishedAtPresent = (publishedAt: string | null | undefined) => {
+  if (!publishedAt) {
+    console.log('Guide not published, skipping GitHub workflow trigger');
+    return;
+  }
+
+  console.log('Guide updated, triggering GitHub workflow...');
+  // Fire and forget - don't block the UI
+  triggerGithubWorkflow('guides').catch(error => 
+    console.error('Failed to trigger workflow after update:', error)
+  );
+}
+
 const validateGuideVersions = async (event: IGuideEvent) => {
   const { data } = event.params;
 
@@ -57,15 +70,16 @@ module.exports = {
     await validateGuideVersions(event);
   },
   async afterUpdate(event: IGuideEvent) {
-    if (event.params.data.publishedAt === undefined) {
-      console.log('Guide not published, skipping GitHub workflow trigger');
+    if (!event.params.where?.id) {
+      console.log('No guide ID found in event params, skipping afterUpdate logic');
       return;
     }
 
-    console.log('Guide updated, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('guides').catch(error => 
-      console.error('Failed to trigger workflow after update:', error)
-    );
+    const latestPublishedAt = event.params.data.publishedAt || (
+      await strapi.db
+        .query('api::guide.guide')
+        .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
+    )?.publishedAt
+    onPublishedAtPresent(latestPublishedAt);
   },
 };

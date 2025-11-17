@@ -14,17 +14,32 @@ interface ISolutionEvent {
   };
 }
 
+
+const onPublishedAtPresent = (publishedAt: string | null | undefined) => {
+  if (!publishedAt) {
+    console.log('Solution not published, skipping GitHub workflow trigger');
+    return;
+  }
+
+  console.log('Solution updated, triggering GitHub workflow...');
+  // Fire and forget - don't block the UI
+  triggerGithubWorkflow('solutions').catch(error => 
+    console.error('Failed to trigger workflow after update:', error)
+  );
+}
+
 module.exports = {
   async afterUpdate(event: ISolutionEvent) {
-    if (event.params.data.publishedAt === undefined) {
-      console.log('Solution not published, skipping GitHub workflow trigger');
+    if (!event.params.where?.id) {
+      console.log('No solution ID found in event params, skipping afterUpdate logic');
       return;
     }
 
-    console.log('Solution updated, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('solutions').catch(error =>
-      console.error('Failed to trigger workflow after update:', error)
-    );
+    const latestPublishedAt = event.params.data.publishedAt || (
+      await strapi.db
+        .query('api::solution.solution')
+        .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
+    )?.publishedAt
+    onPublishedAtPresent(latestPublishedAt);
   },
 };
