@@ -22,9 +22,43 @@ module.exports = {
     }
 
     console.log('Solution updated, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('solutions').catch(error =>
-      console.error('Failed to trigger workflow after update:', error)
-    );
+
+    // Fetch the solution to get dirName
+    const solutionId = event.params.where?.id || event.params.data.id;
+    if (!solutionId) {
+      console.warn('No solution ID found, triggering full sync');
+      triggerGithubWorkflow('solutions').catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+      return;
+    }
+
+    try {
+      const solution = await strapi.entityService.findOne(
+        'api::solution.solution',
+        solutionId,
+        {}
+      );
+
+      if (!solution || !solution.dirName) {
+        console.warn('No dirName found for solution, triggering full sync');
+        triggerGithubWorkflow('solutions').catch(error =>
+          console.error('Failed to trigger workflow after update:', error)
+        );
+        return;
+      }
+
+      console.log(`Syncing solution directory: ${solution.dirName}`);
+      // Fire and forget - don't block the UI
+      triggerGithubWorkflow('solutions', [solution.dirName]).catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    } catch (error) {
+      console.error('Error fetching solution:', error);
+      // Fallback to full sync
+      triggerGithubWorkflow('solutions').catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    }
   },
 };

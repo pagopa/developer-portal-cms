@@ -63,9 +63,56 @@ module.exports = {
     }
 
     console.log('Guide updated, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('guides').catch(error => 
-      console.error('Failed to trigger workflow after update:', error)
-    );
+
+    // Fetch the guide with versions populated to get dirNames
+    const guideId = event.params.where?.id;
+    if (!guideId) {
+      console.warn('No guide ID found, triggering full sync');
+      triggerGithubWorkflow('guides').catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+      return;
+    }
+
+    try {
+      const guide = await strapi.entityService.findOne(
+        'api::guide.guide',
+        guideId,
+        { populate: ['versions'] }
+      );
+
+      if (!guide || !guide.versions || guide.versions.length === 0) {
+        console.warn('No versions found for guide, triggering full sync');
+        triggerGithubWorkflow('guides').catch(error =>
+          console.error('Failed to trigger workflow after update:', error)
+        );
+        return;
+      }
+
+      // Extract dirNames from all versions
+      const dirNames = guide.versions
+        .map((version: any) => version.dirName)
+        .filter((dirName: string) => !!dirName);
+
+      if (dirNames.length === 0) {
+        console.warn('No dirNames found in versions, triggering full sync');
+        triggerGithubWorkflow('guides').catch(error =>
+          console.error('Failed to trigger workflow after update:', error)
+        );
+        return;
+      }
+
+      console.log(`Syncing guide directories: ${dirNames.join(', ')}`);
+      // Fire and forget - don't block the UI
+      triggerGithubWorkflow('guides', dirNames).catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    } catch (error) {
+      console.error('Error fetching guide versions:', error);
+      // Fallback to full sync
+      triggerGithubWorkflow('guides').catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    }
   },
 };
