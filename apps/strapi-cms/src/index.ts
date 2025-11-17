@@ -1,22 +1,25 @@
-export default {
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap: (): undefined => {
-    // do nothing for now
-  },
+import {
+  validateAssociatedProductPresenceOnCreate,
+  validateAssociatedProductPresenceOnUpdate
+} from "./utils/validateProductPresence";
 
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  register: (): undefined => {
-    // do nothing for now
+export default {
+  // @ts-ignore
+  register: ({ strapi }) => {
+    // @ts-ignore
+    strapi.documents.use(async (context,next)=> {
+      switch (context.uid){
+        case 'api::api-data.api-data': {
+          console.log(context.action)
+          if(context.action === 'create'){
+            validateAssociatedProductPresenceOnCreate(context);
+          }
+          else if(context.action === 'update'){
+            validateAssociatedProductPresenceOnUpdate(context);
+          }
+        }
+      }
+      return next();
+    })
   },
 };
