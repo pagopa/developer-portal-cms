@@ -3,21 +3,7 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate,
 } from '../../../../utils/validateProductPresence';
-import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
-
-
-const onPublishedAtPresent = (publishedAt: string | null | undefined) => {
-  if (!publishedAt) {
-    console.log('Release Note not published, skipping GitHub workflow trigger');
-    return;
-  }
-
-  console.log('Release Note updated, triggering GitHub workflow...');
-  // Fire and forget - don't block the UI
-  triggerGithubWorkflow('release-notes').catch(error => 
-    console.error('Failed to trigger workflow after update:', error)
-  );
-}
+import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 module.exports = {
   beforeCreate(event: IEventWithProduct) {
@@ -32,11 +18,12 @@ module.exports = {
       return;
     }
 
-    const latestPublishedAt = event.params.data.publishedAt || (
+    const unpublishing = event.params.data.publishedAt === null;
+    const recordPublishedAt = (
       await strapi.db
         .query('api::release-note.release-note')
         .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
     )?.publishedAt
-    onPublishedAtPresent(latestPublishedAt);
+    onPublishedRecordTriggerGithubWorkflow('release-notes' ,recordPublishedAt, unpublishing);
   },
 };

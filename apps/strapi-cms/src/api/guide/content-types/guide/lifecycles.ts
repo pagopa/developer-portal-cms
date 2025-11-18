@@ -1,5 +1,5 @@
 import { errors } from '@strapi/utils';
-import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
+import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface IGuide {
   readonly publishedAt?: string | null;
@@ -17,19 +17,6 @@ interface IGuideEvent {
       readonly id?: string;
     };
   };
-}
-
-const onPublishedAtPresent = (publishedAt: string | null | undefined) => {
-  if (!publishedAt) {
-    console.log('Guide not published, skipping GitHub workflow trigger');
-    return;
-  }
-
-  console.log('Guide updated, triggering GitHub workflow...');
-  // Fire and forget - don't block the UI
-  triggerGithubWorkflow('guides').catch(error => 
-    console.error('Failed to trigger workflow after update:', error)
-  );
 }
 
 const validateGuideVersions = async (event: IGuideEvent) => {
@@ -75,11 +62,12 @@ module.exports = {
       return;
     }
 
-    const latestPublishedAt = event.params.data.publishedAt || (
+    const unpublishing = event.params.data.publishedAt === null;
+    const recordPublishedAt = (
       await strapi.db
         .query('api::guide.guide')
         .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
     )?.publishedAt
-    onPublishedAtPresent(latestPublishedAt);
+    onPublishedRecordTriggerGithubWorkflow('guides' ,recordPublishedAt, unpublishing);
   },
 };
