@@ -2,6 +2,7 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
+import {triggerGithubWorkflow} from "./utils/triggerGithubWorkflow";
 
 const entitiesRequiringProductAssociation = [
   'api::use-case-list-page.use-case-list-page',
@@ -12,7 +13,9 @@ const entitiesRequiringProductAssociation = [
   'api::overview.overview',
   'api::guide-list-page.guide-list-page',
   'api::api-data-list-page.api-data-list-page',
-  'api::api-data.api-data'];
+  'api::api-data.api-data',
+  'api::release-note.release-note'
+];
 
 export default {
   // @ts-ignore
@@ -26,6 +29,14 @@ export default {
           validateAssociatedProductPresenceOnUpdate(context);
         }
       }
+      if (context.uid === 'api::release-note.release-note' && context.action === 'publish') {
+        console.log('Release note updated, triggering GitHub workflow...');
+        // Fire and forget - don't block the UI
+        triggerGithubWorkflow('release-notes').catch(error =>
+          console.error('Failed to trigger workflow after update:', error)
+        );
+      }
+
       return next();
     })
   },
