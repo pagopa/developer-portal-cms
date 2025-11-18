@@ -18,7 +18,6 @@ export default {
         case 'api::guide-list-page.guide-list-page':
         case 'api::api-data-list-page.api-data-list-page':
         case 'api::api-data.api-data': {
-          console.log(context.action)
           if(context.action === 'create'){
             validateAssociatedProductPresenceOnCreate(context);
           }
