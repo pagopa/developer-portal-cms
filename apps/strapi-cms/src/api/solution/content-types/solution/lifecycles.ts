@@ -1,4 +1,4 @@
-import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
+import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface ISolution {
   readonly id?: string;
@@ -14,17 +14,20 @@ interface ISolutionEvent {
   };
 }
 
+
 module.exports = {
   async afterUpdate(event: ISolutionEvent) {
-    if (event.params.data.publishedAt === undefined) {
-      console.log('Solution not published, skipping GitHub workflow trigger');
+    if (!event.params.where?.id) {
+      console.log('No solution ID found in event params, skipping afterUpdate logic');
       return;
     }
 
-    console.log('Solution updated, triggering GitHub workflow...');
-    // Fire and forget - don't block the UI
-    triggerGithubWorkflow('solutions').catch(error =>
-      console.error('Failed to trigger workflow after update:', error)
-    );
+    const unpublishing = event.params.data.publishedAt === null;
+    const recordPublishedAt = (
+      await strapi.db
+        .query('api::solution.solution')
+        .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
+    )?.publishedAt
+    onPublishedRecordTriggerGithubWorkflow('solutions' ,recordPublishedAt, unpublishing);
   },
 };
