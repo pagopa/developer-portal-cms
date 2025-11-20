@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type MetadataType = 'guides' | 'release-notes' | 'solutions';
+type MetadataType = 'guides' | 'release_notes' | 'solutions';
 
 export const onPublishedRecordTriggerGithubWorkflow = (metadataType: MetadataType, publishedAt: string | null, unpublishing: boolean) => {
   if (!publishedAt && !unpublishing) {
