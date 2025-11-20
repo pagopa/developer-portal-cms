@@ -24,6 +24,6 @@ module.exports = {
         .query('api::release-note.release-note')
         .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
     )?.publishedAt
-    onPublishedRecordTriggerGithubWorkflow('release-notes' ,recordPublishedAt, unpublishing);
+    onPublishedRecordTriggerGithubWorkflow('release_notes' ,recordPublishedAt, unpublishing);
   },
 };
