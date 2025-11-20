@@ -1,5 +1,15 @@
 # strapi-cms
 
+## 4.5.0
+
+### Minor Changes
+
+- 705df27: Refactor gitub workflow triggers
+
+### Patch Changes
+
+- 7c5fe67: Fix standardize metadata type naming from 'release-notes' to 'release_notes'
+
 ## 4.4.0
 
 ### Minor Changes
