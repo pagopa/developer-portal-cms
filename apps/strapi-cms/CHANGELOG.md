@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 705df27: Refactor gitub workflow triggers
+- 705df27: Refactor GitHub workflow triggers
 
 ### Patch Changes
 
