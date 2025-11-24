@@ -33,6 +33,7 @@ interface IWebinar {
   readonly startDatetime?: string;
   readonly endDatetime?: string;
   readonly publishedAt?: string;
+  readonly onDemandVideoStartPoint?: number;
 }
 
 interface IWebinarEvent {
