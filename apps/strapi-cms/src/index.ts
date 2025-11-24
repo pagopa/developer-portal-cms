@@ -3,7 +3,7 @@ import {
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
 import { validateGuideVersions } from "./utils/validateGuideVersions";
-import { triggerGithubWorkflow } from "./utils/triggerGithubWorkflow";
+import { onPublishedRecordTriggerGithubWorkflow } from "./utils/triggerGithubWorkflow";
 
 const entitiesRequiringProductAssociation = [
   'api::use-case-list-page.use-case-list-page',
@@ -65,15 +65,18 @@ export default {
 
       // After update, trigger GitHub workflow if published
       if (context.uid === 'api::guide.guide' && context.action === 'update') {
-        if (context.params.data.publishedAt !== undefined) {
-          console.log('Guide updated, triggering GitHub workflow...');
-          // Fire and forget - don't block the UI
-          triggerGithubWorkflow('guides').catch(error =>
-            console.error('Failed to trigger workflow after update:', error)
-          );
-        } else {
-          console.log('Guide not published, skipping GitHub workflow trigger');
+        if (!context.params.where?.documentId) {
+          console.log('No guide ID found in context params, skipping afterUpdate logic');
+          return result;
         }
+
+        const unpublishing = context.params.data.publishedAt === null;
+        const recordPublishedAt = (
+          await strapi.db
+            .query('api::guide.guide')
+            .findOne({ where: { documentId: context.params.where.documentId }, select: ['publishedAt'] })
+        )?.publishedAt
+        onPublishedRecordTriggerGithubWorkflow('guides' ,recordPublishedAt, unpublishing);
       }
 
       return result;
