@@ -65,6 +65,16 @@
         }
       }
     },
+    "videoOnDemandStartAt": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "startDatetime": {
       "type": "datetime",
       "pluginOptions": {
