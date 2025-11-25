@@ -2,4 +2,4 @@
 "strapi-cms": minor
 ---
 
-Add onDemandVideoStartPoint to Webinars
+Add videoOnDemandStartAt attribute to Webinars
