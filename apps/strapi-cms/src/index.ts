@@ -29,13 +29,23 @@ export default {
           validateAssociatedProductPresenceOnUpdate(context);
         }
       }
-      if (context.uid === 'api::release-note.release-note' && context.action === 'publish') {
-        console.log('Release note updated, triggering GitHub workflow...');
-        // Fire and forget - don't block the UI
-        triggerGithubWorkflow('release-notes').catch(error =>
-          console.error('Failed to trigger workflow after update:', error)
-        );
+      if(context.action === 'publish') {
+        if (context.uid === 'api::release-note.release-note') {
+          console.log('Release note updated, triggering GitHub workflow...');
+          // Fire and forget - don't block the UI
+          triggerGithubWorkflow('release-notes').catch(error =>
+            console.error('Failed to trigger workflow after update:', error)
+          );
+        }
+        else if (context.uid === 'api::solution.solution') {
+          console.log('Solution updated, triggering GitHub workflow...');
+          // Fire and forget - don't block the UI
+          triggerGithubWorkflow('solutions').catch(error =>
+            console.error('Failed to trigger workflow after update:', error)
+          );
+        }
       }
+
 
       return next();
     })
