@@ -25,6 +25,7 @@
  *
  * ============================================================
  */
+/*
 
 import { errors } from '@strapi/utils';
 import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
@@ -99,3 +100,4 @@ module.exports = {
     onPublishedRecordTriggerGithubWorkflow('guides' ,recordPublishedAt, unpublishing);
   },
 };
+*/
