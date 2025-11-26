@@ -33,7 +33,7 @@ export default {
         if (context.uid === 'api::release-note.release-note') {
           console.log('Release note updated, triggering GitHub workflow...');
           // Fire and forget - don't block the UI
-          triggerGithubWorkflow('release-notes').catch(error =>
+          triggerGithubWorkflow('release_notes').catch(error =>
             console.error('Failed to trigger workflow after update:', error)
           );
         }
@@ -45,8 +45,6 @@ export default {
           );
         }
       }
-
-
       return next();
     })
   },
