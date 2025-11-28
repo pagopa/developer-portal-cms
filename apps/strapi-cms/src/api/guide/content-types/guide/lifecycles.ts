@@ -24,11 +24,10 @@
  * Simply uncommenting this file without following the migration guide may result in unexpected behavior and inconsistencies. Ensure that you have completed the migration process before re-enabling this file.
  *
  * ============================================================
- */
-
+//  */
 // import { errors } from '@strapi/utils';
-// import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
-// 
+// import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
+//
 // interface IGuide {
 //   readonly publishedAt?: string | null;
 //   readonly versions?: Array<{
@@ -37,7 +36,7 @@
 //     __pivot: { field: string; component_type: string };
 //   }>;
 // }
-// 
+//
 // interface IGuideEvent {
 //   readonly params: {
 //     readonly data: IGuide;
@@ -46,37 +45,37 @@
 //     };
 //   };
 // }
-// 
+//
 // const validateGuideVersions = async (event: IGuideEvent) => {
 //   const { data } = event.params;
-// 
+//
 //   if (data.versions && Array.isArray(data.versions) && data.versions.length > 0) {
 //     const versionIds = data.versions.map((v) => v.id);
-// 
+//
 //     // Fetch the full version data
 //     const versions = await strapi.db.connection
 //       .select('*')
 //       .from(`components_common_guide_versions`)
 //       .whereIn('id', versionIds);
-// 
+//
 //     const mainVersions = versions.filter((version) => !!version.main);
-// 
+//
 //     if (mainVersions.length === 0) {
 //       throw new errors.ApplicationError(
 //         'A guide with versions must have exactly one version marked as main'
 //       );
 //     }
-// 
+//
 //     if (mainVersions.length > 1) {
 //       throw new errors.ApplicationError(
 //         'A guide can have only one version marked as main'
 //       );
 //     }
 //   }
-// 
+//
 //   return true;
 // };
-// 
+//
 // module.exports = {
 //   async beforeCreate(event: IGuideEvent) {
 //     await validateGuideVersions(event);
@@ -85,16 +84,17 @@
 //     await validateGuideVersions(event);
 //   },
 //   async afterUpdate(event: IGuideEvent) {
-//     if (event.params.data.publishedAt === undefined) {
-//       console.log('Guide not published, skipping GitHub workflow trigger');
+//     if (!event.params.where?.id) {
+//       console.log('No guide ID found in event params, skipping afterUpdate logic');
 //       return;
 //     }
-// 
-//     console.log('Guide updated, triggering GitHub workflow...');
-//     // Fire and forget - don't block the UI
-//     triggerGithubWorkflow('guides').catch(error => 
-//       console.error('Failed to trigger workflow after update:', error)
-//     );
+//
+//     const unpublishing = event.params.data.publishedAt === null;
+//     const recordPublishedAt = (
+//       await strapi.db
+//         .query('api::guide.guide')
+//         .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
+//     )?.publishedAt
+//     onPublishedRecordTriggerGithubWorkflow('guides' ,recordPublishedAt, unpublishing);
 //   },
 // };
-// 

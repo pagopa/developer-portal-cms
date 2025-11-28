@@ -25,10 +25,10 @@
  *
  * ============================================================
  */
-
+//
 // import { errors, env } from '@strapi/utils';
 // import axios from 'axios';
-// 
+//
 // interface IActiveCampaignListPayload {
 //   readonly list: {
 //     readonly name: string;
@@ -39,11 +39,11 @@
 //     readonly unsubscription_notify?: string;
 //   };
 // }
-// 
+//
 // function getActiveCampaignIntegrationIsEnabled() {
 //   return env('ACTIVE_CAMPAIGN_INTEGRATION_IS_ENABLED', 'False') === 'True';
 // }
-// 
+//
 // function getHeaders() {
 //   return {
 //     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -52,7 +52,7 @@
 //     'Content-Type': 'application/json',
 //   };
 // }
-// 
+//
 // interface IWebinar {
 //   readonly id?: string;
 //   readonly slug?: string;
@@ -61,8 +61,9 @@
 //   readonly startDatetime?: string;
 //   readonly endDatetime?: string;
 //   readonly publishedAt?: string;
+//   readonly videoOnDemandStartAt?: number;
 // }
-// 
+//
 // interface IWebinarEvent {
 //   readonly params: {
 //     readonly data: IWebinar;
@@ -72,44 +73,44 @@
 //   };
 //   readonly result: IWebinar;
 // }
-// 
+//
 // const validateDates = (event: IWebinarEvent): boolean => {
 //   const { data } = event.params;
-// 
+//
 //   const startDateTime = data.startDatetime
 //     ? new Date(data.startDatetime)
 //     : null;
 //   const endDateTime = data.endDatetime ? new Date(data.endDatetime) : null;
-// 
+//
 //   if ((startDateTime && !endDateTime) || (!startDateTime && endDateTime)) {
 //     throw new errors.ApplicationError(
 //       'Both start and end dates must be provided, or none should be set'
 //     );
 //   }
-// 
+//
 //   if (startDateTime && endDateTime && endDateTime <= startDateTime) {
 //     throw new errors.ApplicationError('End date must be after start date');
 //   }
 //   return true;
 // };
-// 
+//
 // const validateSlug = (slug?: string): boolean => {
 //   if (!getActiveCampaignIntegrationIsEnabled()) {
 //     return true;
 //   }
-// 
+//
 //   if (!slug) {
 //     throw new errors.ApplicationError(
 //       'The slug of a webinar cannot be an empty string'
 //     );
 //   }
-// 
+//
 //   return true;
 // };
-// 
+//
 // const validateSlugBeforeCreate = (event: IWebinarEvent): boolean =>
 //   validateSlug(event.params.data.slug);
-// 
+//
 // const validateSlugBeforeUpdate = async (
 //   event: IWebinarEvent
 // ): Promise<boolean> => {
@@ -123,10 +124,10 @@
 //       select: ['slug'],
 //       where: { id },
 //     });
-// 
+//
 //   const slug = event.params.data.slug || previousWebinar?.slug;
 //   validateSlug(slug);
-// 
+//
 //   if ((event.params.data.slug || event.params.data.slug === null) && (previousWebinar && previousWebinar.slug !== event.params.data.slug)) {
 //     throw new errors.ApplicationError(
 //       'The slug of a webinar cannot be changed'
@@ -134,13 +135,13 @@
 //   }
 //   return true;
 // };
-// 
+//
 // const activeCampaignError = (message: string) => {
 //   throw new errors.ApplicationError(
 //     `Something went wrong during Active Campaign ${message}`
 //   );
 // };
-// 
+//
 // const createActiveCampaignList = async (
 //   event: IWebinarEvent
 // ): Promise<boolean> => {
@@ -151,9 +152,9 @@
 //   ) {
 //     return true;
 //   }
-// 
+//
 //   const { slug: name, title: stringid } = event.result;
-// 
+//
 //   const payload: IActiveCampaignListPayload = {
 //     list: {
 //       name,
@@ -167,7 +168,7 @@
 //       unsubscription_notify: '',
 //     },
 //   };
-// 
+//
 //   const response = await axios
 //     .post(`${env('AC_BASE_URL')}/api/3/lists`, payload, {
 //       headers: getHeaders(),
@@ -175,14 +176,14 @@
 //     .catch((_) => {
 //       activeCampaignError('list creation');
 //     });
-// 
+//
 //   if (response?.status !== 201) {
 //     activeCampaignError('list creation');
 //   }
-// 
+//
 //   return response?.status === 201;
 // };
-// 
+//
 // const getListIdByName = async (name: string): Promise<number> => {
 //   const response = await axios.get<{
 //     readonly lists: ReadonlyArray<{ readonly id: number }>;
@@ -193,7 +194,7 @@
 //   );
 //   return response?.data.lists[0]?.id;
 // };
-// 
+//
 // const deleteActiveCampaignList = async (
 //   event: IWebinarEvent
 // ): Promise<boolean> => {
@@ -207,17 +208,17 @@
 //   const webinar = await strapi.db
 //     .query('api::webinar.webinar')
 //     .findOne({ where: { id: event.params.where.id } });
-// 
+//
 //   if (!webinar?.slug) {
 //     activeCampaignError('list deletion: webinar slug is missing');
 //   }
 //   // Get list ID using the slug (name)
 //   const listId = await getListIdByName(webinar.slug);
-// 
+//
 //   if (!listId) {
 //     return false;
 //   }
-// 
+//
 //   const response = await axios
 //     .delete(`${env('AC_BASE_URL')}/api/3/lists/${listId}`, {
 //       headers: getHeaders(),
@@ -225,14 +226,14 @@
 //     .catch((_) => {
 //       activeCampaignError('list deletion');
 //     });
-// 
+//
 //   if (response?.status !== 200) {
 //     activeCampaignError('list deletion');
 //   }
-// 
+//
 //   return response?.status === 200;
 // };
-// 
+//
 // module.exports = {
 //   async afterCreate(event: IWebinarEvent) {
 //     await createActiveCampaignList(event);
@@ -256,4 +257,3 @@
 //     await validateSlugBeforeUpdate(event);
 //   },
 // };
-// 
