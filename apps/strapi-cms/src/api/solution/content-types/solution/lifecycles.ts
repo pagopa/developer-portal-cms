@@ -14,9 +14,21 @@ interface ISolutionEvent {
   };
 }
 
+
 module.exports = {
   async afterUpdate(event: ISolutionEvent) {
-    if (event.params.data.publishedAt === undefined) {
+    if (!event.params.where?.id) {
+      console.log('No solution ID found in event params, skipping afterUpdate logic');
+      return;
+    }
+
+    const unpublishing = event.params.data.publishedAt === null;
+    const record = await strapi.db
+      .query('api::solution.solution')
+      .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] });
+    const recordPublishedAt = record?.publishedAt;
+
+    if (!recordPublishedAt && !unpublishing) {
       console.log('Solution not published, skipping GitHub workflow trigger');
       return;
     }

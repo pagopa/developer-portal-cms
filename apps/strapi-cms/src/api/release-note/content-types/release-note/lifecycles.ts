@@ -5,7 +5,6 @@ import {
 } from '../../../../utils/validateProductPresence';
 import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
-
 module.exports = {
   beforeCreate(event: IEventWithProduct) {
     validateAssociatedProductPresenceOnCreate(event);
@@ -14,10 +13,19 @@ module.exports = {
     validateAssociatedProductPresenceOnUpdate(event);
   },
   async afterUpdate(event: IEventWithProduct) {
-    if (event.params.data.publishedAt === undefined) {
-      console.log(
-        'Release note not published, skipping GitHub workflow trigger'
-      );
+    if (!event.params.where?.id) {
+      console.log('No release-note ID found in event params, skipping afterUpdate logic');
+      return;
+    }
+
+    const unpublishing = event.params.data.publishedAt === null;
+    const record = await strapi.db
+      .query('api::release-note.release-note')
+      .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] });
+    const recordPublishedAt = record?.publishedAt;
+
+    if (!recordPublishedAt && !unpublishing) {
+      console.log('Release note not published, skipping GitHub workflow trigger');
       return;
     }
 
@@ -42,13 +50,13 @@ module.exports = {
 
       console.log(`Syncing release note directory: ${releaseNote.dirName}`);
       // Fire and forget - don't block the UI
-      triggerGithubWorkflow('release-notes', [releaseNote.dirName]).catch(error =>
+      triggerGithubWorkflow('release_notes', [releaseNote.dirName]).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     } catch (error) {
       console.error('Error fetching release note:', error);
       // Fallback to full sync
-      triggerGithubWorkflow('release-notes').catch(error =>
+      triggerGithubWorkflow('release_notes').catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     }

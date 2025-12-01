@@ -57,7 +57,18 @@ module.exports = {
     await validateGuideVersions(event);
   },
   async afterUpdate(event: IGuideEvent) {
-    if (event.params.data.publishedAt === undefined) {
+    if (!event.params.where?.id) {
+      console.log('No guide ID found in event params, skipping afterUpdate logic');
+      return;
+    }
+
+    const unpublishing = event.params.data.publishedAt === null;
+    const record = await strapi.db
+      .query('api::guide.guide')
+      .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] });
+    const recordPublishedAt = record?.publishedAt;
+
+    if (!recordPublishedAt && !unpublishing) {
       console.log('Guide not published, skipping GitHub workflow trigger');
       return;
     }
