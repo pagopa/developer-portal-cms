@@ -64,17 +64,13 @@ module.exports = {
 
     console.log('Guide updated, triggering GitHub workflow...');
 
-    // Fetch the guide with versions populated to get dirNames
-    const guideId = event.params.where?.id;
-    if (!guideId) {
-      console.warn('No guide ID found, triggering full sync');
-      triggerGithubWorkflow('guides').catch(error =>
-        console.error('Failed to trigger workflow after update:', error)
-      );
-      return;
-    }
-
     try {
+      // Fetch the guide with versions populated to get dirNames
+      const guideId = event.params.where?.id;
+      if (!guideId) {
+        throw new Error('No guide ID found, triggering full sync');
+      }
+
       const guide = await strapi.entityService.findOne(
         'api::guide.guide',
         guideId,
@@ -82,11 +78,7 @@ module.exports = {
       );
 
       if (!guide || !guide.versions || guide.versions.length === 0) {
-        console.warn('No versions found for guide, triggering full sync');
-        triggerGithubWorkflow('guides').catch(error =>
-          console.error('Failed to trigger workflow after update:', error)
-        );
-        return;
+        throw new Error('No versions found for guide, triggering full sync');
       }
 
       // Extract dirNames from all versions
@@ -95,11 +87,7 @@ module.exports = {
         .filter((dirName: string) => !!dirName);
 
       if (dirNames.length === 0) {
-        console.warn('No dirNames found in versions, triggering full sync');
-        triggerGithubWorkflow('guides').catch(error =>
-          console.error('Failed to trigger workflow after update:', error)
-        );
-        return;
+        throw new Error('No dirNames found in versions, triggering full sync');
       }
 
       console.log(`Syncing guide directories: ${dirNames.join(', ')}`);
