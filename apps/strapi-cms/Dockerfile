@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:22-alpine@sha256:a315556d82ef54561e54fca7d8ee333382de183d4e56841dcefcd05b55310f46
+ARG NODE_IMAGE=node:22.21.1-alpine3.21@sha256:af8023ec879993821f6d5b21382ed915622a1b0f1cc03dbeb6804afaf01f8885
 
 # Creating multi-stage build for production
 FROM ${NODE_IMAGE} AS build
