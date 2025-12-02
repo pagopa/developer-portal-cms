@@ -7,6 +7,7 @@
     "generate": "strapi ts:generate-types",
     "precompile": "npm run clean && npm run generate",
     "compile": "tsc --noEmit",
+    "develop": "strapi develop",
     "dev": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
@@ -40,7 +41,7 @@
     "uuid": "1ae9c07f-4fbf-400a-9d32-bba36247aed0"
   },
   "engines": {
-    "node": "18.18.0",
+    "node": "22.18.0",
     "npm": "9.8.1"
   },
   "license": "MIT"
