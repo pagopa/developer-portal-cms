@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  environment: dev
+  ENVIRONMENT: dev
 
 defaults:
   run:
@@ -24,13 +24,13 @@ permissions:
 jobs:
 
   manual_deploy:
-    name: Build and push CMS image (manual trigger) - (${{ env.environment }})
+    name: Build and push CMS image (manual trigger) - ($ENVIRONMENT)
     runs-on: ubuntu-latest
     continue-on-error: false
-    environment: ${{ env.environment }}
+    environment: $ENVIRONMENT
 
     concurrency:
-      group: ${{ github.workflow }}-${{ env.environment }}
+      group: ${{ github.workflow }}-$env.ENVIRONMENT
       cancel-in-progress: false
 
     steps:
