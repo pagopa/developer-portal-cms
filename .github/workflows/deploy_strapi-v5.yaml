@@ -9,8 +9,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  ENVIRONMENT: dev
 
 defaults:
   run:
@@ -24,15 +22,10 @@ permissions:
 jobs:
 
   manual_deploy:
-    name: Build and push CMS image (manual trigger) - ($ENVIRONMENT)
+    name: Build and push CMS image (manual trigger)
     runs-on: ubuntu-latest
     continue-on-error: false
-    environment: $ENVIRONMENT
-
-    concurrency:
-      group: ${{ github.workflow }}-$env.ENVIRONMENT
-      cancel-in-progress: false
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
@@ -41,7 +34,7 @@ jobs:
         uses: ./.github/actions/configure-aws-credentials
         with:
           aws_region: ${{ env.AWS_REGION || 'eu-south-1' }}
-          role_to_assume: GitHubActionDeployCmsV5
+          role_to_assume: arn:aws:iam::039804388894:role/GitHubActionDeployCmsV5
 
       - name: Login to Amazon ECR
         id: login-ecr
