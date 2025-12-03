@@ -1,8 +1,17 @@
 import axios from 'axios';
 
-type MetadataType = 'guides' | 'release-notes' | 'solutions';
+type MetadataType = 'guides' | 'release_notes' | 'solutions';
 
-export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
+export const onPublishedRecordTriggerGithubWorkflow = (metadataType: MetadataType) => {
+  console.log(`${metadataType} updated, triggering GitHub workflow...`);
+  // Fire and forget - don't block the UI
+  triggerGithubWorkflow(metadataType).catch(error =>
+    console.error(`Failed to trigger workflow after ${metadataType} update:`, error)
+  );
+}
+
+
+const triggerGithubWorkflow = async (metadataType: MetadataType) => {
   try {
     const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
@@ -11,7 +20,7 @@ export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
     }
 
     console.log('🚀 Triggering GitHub workflow...');
-    
+
     const response = await axios.post(
       'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
       {
