@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.6.0
+
+### Minor Changes
+
+- f4ad489: Add videoOnDemandStartAt attribute to Webinars
+
 ## 4.5.0
 
 ### Minor Changes
