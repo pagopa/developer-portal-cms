@@ -89,7 +89,8 @@ module.exports = {
       );
 
       if (!guide || !guide.versions || guide.versions.length === 0) {
-        throw new Error('No versions found for guide, triggering full sync');
+        console.log('No versions found for guide, skipping GitHub workflow trigger');
+        return;
       }
 
       // Extract dirNames from all versions

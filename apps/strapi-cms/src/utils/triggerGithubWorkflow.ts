@@ -23,7 +23,7 @@ export const triggerGithubWorkflow = async (
     }
 
     const response = await axios.post(
-      'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs_optimized.yaml/dispatches',
+      'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
       {
         ref: 'main',
         inputs: {
