@@ -17,7 +17,7 @@ export const triggerGithubWorkflow = async (
     if (dirNames?.length) {
       console.log(`📁 Incremental sync requested for: ${dirNames.join(', ')}`);
     }
-    
+
     const response = await axios.post(
       'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
       {
