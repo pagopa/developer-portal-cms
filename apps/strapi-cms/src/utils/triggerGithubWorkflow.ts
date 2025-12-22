@@ -10,7 +10,7 @@ export const onPublishedRecordTriggerGithubWorkflow = (metadataType: MetadataTyp
   );
 }
 
-const triggerGithubWorkflow = async (metadataType: MetadataType) => {
+export const triggerGithubWorkflow = async (metadataType: MetadataType) => {
   try {
     const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
