@@ -2,8 +2,7 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
-import { validateGuideVersions } from "./utils/validateGuideVersions";
-import { onPublishedRecordTriggerGithubWorkflow } from "./utils/triggerGithubWorkflow";
+import {onPublishedRecordTriggerGithubWorkflow, triggerGithubWorkflow} from "./utils/triggerGithubWorkflow";
 import { validateWebinarDates } from "./utils/validateWebinarDates";
 import {
   validateSlugBeforeCreate,
@@ -14,6 +13,7 @@ import {
   deleteActiveCampaignList,
   preventBulkDeletion
 } from "./utils/activeCampaignWebinar";
+import {validateGuideVersions} from "./utils/validateGuideVersions";
 
 const entitiesRequiringProductAssociation = [
   'api::use-case-list-page.use-case-list-page',
@@ -40,39 +40,13 @@ export default {
           validateAssociatedProductPresenceOnUpdate(context);
         }
       }
-      if(context.action === 'publish') {
+      if (context.action === 'publish') {
         if (context.uid === 'api::release-note.release-note') {
           onPublishedRecordTriggerGithubWorkflow("release-notes");
-        }
-        else if (context.uid === 'api::solution.solution') {
+        } else if (context.uid === 'api::solution.solution') {
           onPublishedRecordTriggerGithubWorkflow("solutions");
         }
       }
-
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  // @ts-ignore
-  register: ({strapi}) => {
-    // Middleware for entities requiring product association validation
-    // @ts-ignore
-    strapi.documents.use(async (context, next) => {
-      if (entitiesRequiringProductAssociation.includes(context.uid)) {
-        if (context.action === 'create') {
-          validateAssociatedProductPresenceOnCreate(context);
-        } else if (context.action === 'update') {
-          validateAssociatedProductPresenceOnUpdate(context);
-        }
-      }
-      return next();
-    });
-
-    // Middleware for guide content type
-    // @ts-ignore
-    strapi.documents.use(async (context, next) => {
       if (context.uid === 'api::guide.guide') {
         // Validate versions before create/update
         if (context.action === 'create' || context.action === 'update') {
@@ -96,12 +70,7 @@ export default {
         }
       }
 
-      return result;
-    });
 
-    // Middleware for webinar content type
-    // @ts-ignore
-    strapi.documents.use(async (context, next) => {
       if (context.uid === 'api::webinar.webinar') {
         // Before create validations
         if (context.action === 'create') {
@@ -126,9 +95,6 @@ export default {
         }
       }
 
-      // Execute the action
-      const result = await next();
-
       // After create - create Active Campaign list
       if (context.uid === 'api::webinar.webinar' && context.action === 'create') {
         await createActiveCampaignList({
@@ -139,5 +105,4 @@ export default {
 
       return result;
     });
-  },
-};
+},};
