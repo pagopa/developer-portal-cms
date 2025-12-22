@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { Strapi } from '@strapi/types';
 import { errors } from '@strapi/utils';
 import { triggerGithubWorkflow } from '../utils/triggerGithubWorkflow';
