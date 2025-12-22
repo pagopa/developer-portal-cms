@@ -2,7 +2,7 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
-import {triggerGithubWorkflow} from "./utils/triggerGithubWorkflow";
+import {onPublishedRecordTriggerGithubWorkflow} from "./utils/triggerGithubWorkflow";
 
 const entitiesRequiringProductAssociation = [
   'api::use-case-list-page.use-case-list-page',
@@ -31,21 +31,12 @@ export default {
       }
       if(context.action === 'publish') {
         if (context.uid === 'api::release-note.release-note') {
-          console.log('Release note updated, triggering GitHub workflow...');
-          // Fire and forget - don't block the UI
-          triggerGithubWorkflow('release-notes').catch(error =>
-            console.error('Failed to trigger workflow after update:', error)
-          );
+          onPublishedRecordTriggerGithubWorkflow("release-notes");
         }
         else if (context.uid === 'api::solution.solution') {
-          console.log('Solution updated, triggering GitHub workflow...');
-          // Fire and forget - don't block the UI
-          triggerGithubWorkflow('solutions').catch(error =>
-            console.error('Failed to trigger workflow after update:', error)
-          );
+          onPublishedRecordTriggerGithubWorkflow("solutions");
         }
       }
-
 
       return next();
     })
