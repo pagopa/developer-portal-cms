@@ -3,7 +3,7 @@ import {
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
 import { validateGuideVersions } from "./utils/validateGuideVersions";
-import { triggerGithubWorkflow } from "./utils/triggerGithubWorkflow";
+import { onPublishedRecordTriggerGithubWorkflow } from "./utils/triggerGithubWorkflow";
 import { validateWebinarDates } from "./utils/validateWebinarDates";
 import {
   validateSlugBeforeCreate,
@@ -24,20 +24,30 @@ const entitiesRequiringProductAssociation = [
   'api::overview.overview',
   'api::guide-list-page.guide-list-page',
   'api::api-data-list-page.api-data-list-page',
-  'api::api-data.api-data'
+  'api::api-data.api-data',
+  'api::release-note.release-note'
 ];
 
 export default {
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap: (): undefined => {
-    // do nothing for now
-  },
+  // @ts-ignore
+  register: ({strapi}) => {
+    // @ts-ignore
+    strapi.documents.use(async (context, next) => {
+      if (entitiesRequiringProductAssociation.includes(context.uid)) {
+        if (context.action === 'create') {
+          validateAssociatedProductPresenceOnCreate(context);
+        } else if (context.action === 'update') {
+          validateAssociatedProductPresenceOnUpdate(context);
+        }
+      }
+      if(context.action === 'publish') {
+        if (context.uid === 'api::release-note.release-note') {
+          onPublishedRecordTriggerGithubWorkflow("release-notes");
+        }
+        else if (context.uid === 'api::solution.solution') {
+          onPublishedRecordTriggerGithubWorkflow("solutions");
+        }
+      }
 
   /**
    * An asynchronous register function that runs before
