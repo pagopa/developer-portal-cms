@@ -1,19 +1,15 @@
-// @ts-ignore
-import type { Strapi } from '@strapi/types';
 import { errors } from '@strapi/utils';
 import { triggerGithubWorkflow } from '../utils/triggerGithubWorkflow';
 import {
   type IEventWithProduct,
-  validateAssociatedProductPresenceOnCreate,
-  validateAssociatedProductPresenceOnUpdate,
 } from '../utils/validateProductPresence';
 
-const GUIDES_UID = 'api::guide.guide';
-const RELEASE_NOTES_UID = 'api::release-note.release-note';
-const SOLUTIONS_UID = 'api::solution.solution';
+export const GUIDES_UID = 'api::guide.guide';
+export const RELEASE_NOTES_UID = 'api::release-note.release-note';
+export const SOLUTIONS_UID = 'api::solution.solution';
 const GUIDE_VERSION_TABLE = 'components_common_guide_versions';
 
-const entitiesRequiringProductAssociation = [
+export const entitiesRequiringProductAssociation = [
   'api::use-case-list-page.use-case-list-page',
   'api::use-case.use-case',
   'api::tutorial-list-page.tutorial-list-page',
@@ -60,7 +56,7 @@ interface IGuideVersionInput {
   readonly id?: number | string;
 }
 
-interface IGuideData {
+export interface IGuideData {
   readonly versions?: ReadonlyArray<IGuideVersionInput>;
 }
 
@@ -116,8 +112,8 @@ const getEntryWhereClause = (
 
   return undefined;
 };
-
-const validateGuideVersions = async (strapi: Strapi, data?: IGuideData) => {
+//@ts-ignore
+export const validateGuideVersions = async (strapi: Strapi, data?: IGuideData) => {
   if (!strapi.db?.connection) {
     console.warn('Strapi database connection unavailable - skipping guide version validation');
     return;
@@ -156,8 +152,9 @@ const validateGuideVersions = async (strapi: Strapi, data?: IGuideData) => {
     );
   }
 };
+//@ts-ignore
 
-const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
+export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
   const db = strapi.db;
   if (!db) {
     console.warn('Strapi database unavailable - skipping guide workflow trigger');
@@ -207,8 +204,9 @@ const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMiddlewareC
     );
   }
 };
+//@ts-ignore
 
-const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
+export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
   const db = strapi.db;
   if (!db) {
     console.warn('Strapi database unavailable - skipping solution workflow trigger');
@@ -250,8 +248,9 @@ const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentMiddlewa
     );
   }
 };
+//@ts-ignore
 
-const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
+export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: DocumentMiddlewareContext) => {
   const db = strapi.db;
   if (!db) {
     console.warn('Strapi database unavailable - skipping release note workflow trigger');
@@ -292,32 +291,4 @@ const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: DocumentMiddl
       console.error('Failed to trigger workflow after update:', innerError)
     );
   }
-};
-
-export const createDocumentMiddleware = (strapi: Strapi) => {
-  return async (context: DocumentMiddlewareContext, next: () => Promise<void>) => {
-    if (entitiesRequiringProductAssociation.includes(context.uid)) {
-      if (context.action === 'create') {
-        validateAssociatedProductPresenceOnCreate(context);
-      } else if (context.action === 'update') {
-        validateAssociatedProductPresenceOnUpdate(context);
-      }
-    }
-
-    if (context.uid === GUIDES_UID && (context.action === 'create' || context.action === 'update')) {
-      await validateGuideVersions(strapi, context.params?.data as IGuideData | undefined);
-    }
-
-    await next();
-
-    if (context.action === 'publish' || context.action === 'unpublish') {
-      if (context.uid === GUIDES_UID) {
-        await triggerGuideWorkflow(strapi, context);
-      } else if (context.uid === RELEASE_NOTES_UID) {
-        await triggerReleaseNoteWorkflow(strapi, context);
-      } else if (context.uid === SOLUTIONS_UID) {
-        await triggerSolutionWorkflow(strapi, context);
-      }
-    }
-  };
 };
