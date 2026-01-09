@@ -28,7 +28,6 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.0.0",
     "strapi-plugin-sso": "1.0.7",
-    "strapi-provider-upload-custom": "*",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
