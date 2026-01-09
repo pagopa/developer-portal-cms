@@ -60,9 +60,11 @@ jobs:
             provenance: false
 
       - name: Generate task-definition file
-        run: aws ecs describe-task-definition \
-             --task-definition cms-task-def-v5 \
-             --query taskDefinition > task-definition.json
+        shell: bash
+        run: |
+          aws ecs describe-task-definition \
+          --task-definition cms-task-def-v5 \
+          --query taskDefinition > task-definition.json
 
       - name: Update ImageTag in task-definition
         id: task-def
