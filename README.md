@@ -22,6 +22,7 @@ npm run dev -w strapi-cms
 
 ### Populate strapi cms
 
+
 To use SQLite for local development, add the following configuration to the `sqlite` object in `apps/strapi-cms/config/database.ts` to ensure the transfer completes successfully:
 ```
       pool: {
