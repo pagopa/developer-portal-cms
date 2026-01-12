@@ -7,7 +7,7 @@ export const triggerGithubWorkflow = async (
   dirNames?: ReadonlyArray<string>
 ) => {
   try {
-    const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
+    const githubPat = null;//process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
       console.warn('GITHUB_PERSONAL_ACCESS_TOKEN not configured - skipping workflow trigger');
       return;
