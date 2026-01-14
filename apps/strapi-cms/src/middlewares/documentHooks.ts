@@ -226,7 +226,6 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
     }
 
     console.log(`Syncing guide directories: ${uniqueDirNames.join(', ')}`);
-    // @ts-ignore
     triggerGithubWorkflow('guides', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
