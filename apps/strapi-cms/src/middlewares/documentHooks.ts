@@ -23,8 +23,8 @@ export const entitiesRequiringProductAssociation = [
 ];
 
 type EntryWhereClause =
-  | { readonly id: number }
-  | { readonly id: { readonly $in: ReadonlyArray<number> } }
+  | { readonly id: number | string }
+  | { readonly id: { readonly $in: ReadonlyArray<number | string> } }
   | { readonly documentId: string }
   | { readonly documentId: { readonly $in: ReadonlyArray<string> } };
 
@@ -88,28 +88,41 @@ const parseDocumentId = (value: unknown): string | undefined => {
 const getEntryWhereClause = (
   context: DocumentMiddlewareContext
 ): EntryWhereClause | undefined => {
-  const paramsWhere = context.params?.where ?? {};
+  type IdInClause = { $in: Array<number | string> };
+  type DocumentIdInClause = { $in: string[] };
+  type ParamsWhere = {
+    id?: number | string | Array<number | string> | IdInClause;
+    documentId?: string | string[] | DocumentIdInClause;
+  };
+  const paramsWhere = (context.params?.where ?? {}) as ParamsWhere;
 
   // Check for bulk operations first
-  // @ts-ignore
-  if (paramsWhere?.id?.['$in']) {
-    // @ts-ignore
-    return { id: { $in: paramsWhere.id['$in'] } };
+  const idWhere = paramsWhere.id;
+  if (
+    idWhere &&
+    typeof idWhere === 'object' &&
+    !Array.isArray(idWhere) &&
+    '$in' in idWhere
+  ) {
+    return { id: { $in: idWhere.$in } };
   }
-  // @ts-ignore
-  if (paramsWhere?.documentId?.['$in']) {
-    // @ts-ignore
-    return { documentId: { $in: paramsWhere.documentId['$in'] } };
+
+  const documentIdWhere = paramsWhere.documentId;
+  if (
+    documentIdWhere &&
+    typeof documentIdWhere === 'object' &&
+    !Array.isArray(documentIdWhere) &&
+    '$in' in documentIdWhere
+  ) {
+    return { documentId: { $in: documentIdWhere.$in } };
   }
-  // @ts-ignore
-  if (Array.isArray(paramsWhere?.id)) {
-    // @ts-ignore
-    return { id: { $in: paramsWhere.id } };
+
+  if (Array.isArray(idWhere)) {
+    return { id: { $in: idWhere } };
   }
-  // @ts-ignore
-  if (Array.isArray(paramsWhere?.documentId)) {
-    // @ts-ignore
-    return { documentId: { $in: paramsWhere.documentId } };
+
+  if (Array.isArray(documentIdWhere)) {
+    return { documentId: { $in: documentIdWhere } };
   }
 
 
