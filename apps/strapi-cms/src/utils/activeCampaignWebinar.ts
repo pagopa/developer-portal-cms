@@ -25,67 +25,6 @@ function getHeaders() {
     'Content-Type': 'application/json',
   };
 }
-const validateDates = (event: IWebinarEvent): boolean => {
-  const { data } = event.params;
-
-  const startDateTime = data.startDatetime
-    ? new Date(data.startDatetime)
-    : null;
-  const endDateTime = data.endDatetime ? new Date(data.endDatetime) : null;
-
-  if ((startDateTime && !endDateTime) || (!startDateTime && endDateTime)) {
-    throw new errors.ApplicationError(
-      'Both start and end dates must be provided, or none should be set'
-    );
-  }
-
-  if (startDateTime && endDateTime && endDateTime <= startDateTime) {
-    throw new errors.ApplicationError('End date must be after start date');
-  }
-  return true;
-};
-
-const validateSlug = (slug?: string): boolean => {
-  if (!getActiveCampaignIntegrationIsEnabled()) {
-    return true;
-  }
-
-  if (!slug) {
-    throw new errors.ApplicationError(
-      'The slug of a webinar cannot be an empty string'
-    );
-  }
-
-  return true;
-};
-
-const validateSlugBeforeCreate = (event: IWebinarEvent): boolean =>
-  validateSlug(event.params.data.slug);
-
-const validateSlugBeforeUpdate = async (
-  event: IWebinarEvent
-): Promise<boolean> => {
-  const id = event.params.where?.documentId;
-  if (!id) {
-    throw new errors.ApplicationError('Webinar id not found');
-  }
-  const previousWebinar = await strapi.db
-    .query('api::webinar.webinar')
-    .findOne({
-      select: ['slug'],
-      where: { id },
-    });
-
-  const slug = event.params.data.slug || previousWebinar?.slug;
-  validateSlug(slug);
-
-  if ((event.params.data.slug || event.params.data.slug === null) && (previousWebinar && previousWebinar.slug !== event.params.data.slug)) {
-    throw new errors.ApplicationError(
-      'The slug of a webinar cannot be changed'
-    );
-  }
-  return true;
-};
 
 const activeCampaignError = (message: string) => {
   throw new errors.ApplicationError(
