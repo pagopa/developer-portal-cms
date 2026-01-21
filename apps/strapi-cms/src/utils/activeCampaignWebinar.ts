@@ -25,17 +25,6 @@ function getHeaders() {
     'Content-Type': 'application/json',
   };
 }
-
-interface IWebinar {
-  readonly id?: string;
-  readonly slug?: string;
-  readonly title?: string;
-  readonly locale?: string;
-  readonly startDatetime?: string;
-  readonly endDatetime?: string;
-  readonly publishedAt?: string;
-  readonly videoOnDemandStartAt?: number;
-}
 const validateDates = (event: IWebinarEvent): boolean => {
   const { data } = event.params;
 

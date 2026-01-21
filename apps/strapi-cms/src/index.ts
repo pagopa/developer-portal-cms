@@ -12,6 +12,9 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
 } from "./utils/validateProductPresence";
+import {validateWebinarDates} from "./utils/validateWebinarDates";
+import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from "./utils/validateWebinarSlug";
+import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from "./utils/activeCampaignWebinar";
 
 export default {
 // @ts-ignore
@@ -43,6 +46,39 @@ export default {
           await triggerSolutionWorkflow(strapi, context);
         }
       }
+
+      if (context.uid === 'api::webinar.webinar') {
+        // Before create validations
+        if (context.action === 'create') {
+          validateWebinarDates(context);
+          validateSlugBeforeCreate(context);
+        }
+
+        // Before update validations
+        if (context.action === 'update') {
+          validateWebinarDates(context);
+          await validateSlugBeforeUpdate(context);
+        }
+
+        // Before delete - remove Active Campaign list
+        if (context.action === 'delete') {
+          await deleteActiveCampaignList(context);
+        }
+
+        // Prevent bulk deletion if Active Campaign is enabled
+        if (context.action === 'delete' && context.params?.where?._q) {
+          preventBulkDeletion();
+        }
+      }
+
+      // After create - create Active Campaign list
+      if (context.uid === 'api::webinar.webinar' && context.action === 'create') {
+        await createActiveCampaignList({
+          params: context.params,
+          result: await next(),
+        });
+      }
+
       return next();
     });
   },
