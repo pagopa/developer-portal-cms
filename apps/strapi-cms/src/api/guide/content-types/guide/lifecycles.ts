@@ -1,5 +1,5 @@
 import { errors } from '@strapi/utils';
-import { onPublishedRecordTriggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
+import { triggerGithubWorkflow } from '../../../../utils/triggerGithubWorkflow';
 
 interface IGuide {
   readonly publishedAt?: string | null;
@@ -63,11 +63,56 @@ module.exports = {
     }
 
     const unpublishing = event.params.data.publishedAt === null;
-    const recordPublishedAt = (
-      await strapi.db
-        .query('api::guide.guide')
-        .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] })
-    )?.publishedAt
-    onPublishedRecordTriggerGithubWorkflow('guides' ,recordPublishedAt, unpublishing);
+    const record = await strapi.db
+      .query('api::guide.guide')
+      .findOne({ where: { id: event.params.where.id }, select: ['publishedAt'] });
+    const recordPublishedAt = record?.publishedAt;
+
+    if (!recordPublishedAt && !unpublishing) {
+      console.log('Guide not published, skipping GitHub workflow trigger');
+      return;
+    }
+
+    console.log('Guide updated, triggering GitHub workflow...');
+
+    try {
+      // Fetch the guide with versions populated to get dirNames
+      const guideId = event.params.where?.id;
+      if (!guideId) {
+        throw new Error('No guide ID found, triggering full sync');
+      }
+
+      const guide = await strapi.entityService.findOne(
+        'api::guide.guide',
+        guideId,
+        { populate: ['versions'] }
+      );
+
+      if (!guide || !guide.versions || guide.versions.length === 0) {
+        console.log('No versions found for guide, skipping GitHub workflow trigger');
+        return;
+      }
+
+      // Extract dirNames from all versions
+      const dirNames = guide.versions
+        .map((version: any) => version.dirName)
+        .filter((dirName: string) => !!dirName);
+
+      if (dirNames.length === 0) {
+        throw new Error('No dirNames found in versions, triggering full sync');
+      }
+
+      console.log(`Syncing guide directories: ${dirNames.join(', ')}`);
+      // Fire and forget - don't block the UI
+      triggerGithubWorkflow('guides', dirNames).catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    } catch (error) {
+      console.error('Error fetching guide versions:', error);
+      // Fallback to full sync
+      triggerGithubWorkflow('guides').catch(error =>
+        console.error('Failed to trigger workflow after update:', error)
+      );
+    }
   },
 };

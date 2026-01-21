@@ -5,6 +5,7 @@ const validatorsAreDisabled = process.env.DISABLE_CUSTOM_VALIDATORS === 'True';
 export interface IEventWithProduct {
   readonly params: {
     readonly data: {
+      readonly id?: string;
       readonly product?: {
         readonly connect?: Array<{
           readonly id: string;
