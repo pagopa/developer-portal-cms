@@ -26,7 +26,8 @@ export const triggerGithubWorkflow = async (
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
           generate_metadata_only: 'false',
-          incremental_mode: 'true'
+          incremental_mode: 'true',
+          ...(dirNames?.length ? { dir_names: JSON.stringify(dirNames) } : {})
         }
       },
       {

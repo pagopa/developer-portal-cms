@@ -23,8 +23,10 @@ export const entitiesRequiringProductAssociation = [
 ];
 
 type EntryWhereClause =
-  | { readonly id: number }
-  | { readonly documentId: string };
+  | { readonly id: number | string }
+  | { readonly id: { readonly $in: ReadonlyArray<number | string> } }
+  | { readonly documentId: string }
+  | { readonly documentId: { readonly $in: ReadonlyArray<string> } };
 
 type BaseParams = IEventWithProduct['params'];
 
@@ -86,7 +88,43 @@ const parseDocumentId = (value: unknown): string | undefined => {
 const getEntryWhereClause = (
   context: DocumentMiddlewareContext
 ): EntryWhereClause | undefined => {
-  const paramsWhere = context.params?.where ?? {};
+  type IdInClause = { $in: Array<number | string> };
+  type DocumentIdInClause = { $in: string[] };
+  type ParamsWhere = {
+    id?: number | string | Array<number | string> | IdInClause;
+    documentId?: string | string[] | DocumentIdInClause;
+  };
+  const paramsWhere = (context.params?.where ?? {}) as ParamsWhere;
+
+  // Check for bulk operations first
+  const idWhere = paramsWhere.id;
+  if (
+    idWhere &&
+    typeof idWhere === 'object' &&
+    !Array.isArray(idWhere) &&
+    '$in' in idWhere
+  ) {
+    return { id: { $in: idWhere.$in } };
+  }
+
+  const documentIdWhere = paramsWhere.documentId;
+  if (
+    documentIdWhere &&
+    typeof documentIdWhere === 'object' &&
+    !Array.isArray(documentIdWhere) &&
+    '$in' in documentIdWhere
+  ) {
+    return { documentId: { $in: documentIdWhere.$in } };
+  }
+
+  if (Array.isArray(idWhere)) {
+    return { id: { $in: idWhere } };
+  }
+
+  if (Array.isArray(documentIdWhere)) {
+    return { documentId: { $in: documentIdWhere } };
+  }
+
 
   const rawNumericId =
     context.result?.id ??
@@ -174,27 +212,34 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
   console.log('Guide updated, triggering GitHub workflow...');
 
   try {
-    const guide = await db
-      .query(GUIDES_UID)
-      .findOne({
-        where,
-        populate: ['versions'],
-      });
+    let guides: any[] = [];
 
-    if (!guide || !Array.isArray(guide.versions) || guide.versions.length === 0) {
-      throw new Error('No versions found for guide, triggering full sync');
+    // @ts-ignore
+    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
+      guides = await db.query(GUIDES_UID).findMany({ where, populate: ['versions'] });
+    } else {
+      const guide = await db.query(GUIDES_UID).findOne({ where, populate: ['versions'] });
+      if (guide) guides = [guide];
     }
 
-    const dirNames = guide.versions
-      .map((version: Record<string, unknown>) => version?.dirName as string | undefined)
-      .filter((dirName: string | undefined): dirName is string => Boolean(dirName));
+    if (guides.length === 0) {
+      throw new Error('No guides found, triggering full sync');
+    }
 
-    if (dirNames.length === 0) {
+    const dirNames = guides.flatMap(guide =>
+      (guide.versions || [])
+        .map((version: Record<string, unknown>) => version?.dirName as string | undefined)
+    ).filter((dirName: string | undefined): dirName is string => Boolean(dirName));
+
+    // Deduplicate dirNames
+    const uniqueDirNames = Array.from(new Set(dirNames));
+
+    if (uniqueDirNames.length === 0) {
       throw new Error('No dirNames found in versions, triggering full sync');
     }
 
-    console.log(`Syncing guide directories: ${dirNames.join(', ')}`);
-    triggerGithubWorkflow('guides', dirNames).catch((error) =>
+    console.log(`Syncing guide directories: ${uniqueDirNames.join(', ')}`);
+    triggerGithubWorkflow('guides', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
@@ -226,19 +271,31 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
   console.log('Solution updated, triggering GitHub workflow...');
 
   try {
-    const solution = await db
-      .query(SOLUTIONS_UID)
-      .findOne({
-        where,
-        select: ['dirName'],
-      });
+    let solutions: any[] = [];
+    // @ts-ignore
+    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
+      solutions = await db.query(SOLUTIONS_UID).findMany({ where, select: ['dirName'] });
+    } else {
+      const solution = await db.query(SOLUTIONS_UID).findOne({ where, select: ['dirName'] });
+      if (solution) solutions = [solution];
+    }
 
-    if (!solution || !solution.dirName) {
+    if (solutions.length === 0) {
+      throw new Error('No solutions found, triggering full sync');
+    }
+
+    const dirNames = solutions
+      .map(s => s.dirName)
+      .filter((dirName): dirName is string => Boolean(dirName));
+
+    const uniqueDirNames = Array.from(new Set(dirNames));
+
+    if (uniqueDirNames.length === 0) {
       throw new Error('No dirName found for solution, triggering full sync');
     }
 
-    console.log(`Syncing solution directory: ${solution.dirName}`);
-    triggerGithubWorkflow('solutions', [solution.dirName]).catch((error) =>
+    console.log(`Syncing solution directory: ${uniqueDirNames.join(', ')}`);
+    triggerGithubWorkflow('solutions', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
@@ -270,19 +327,31 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
   console.log('Release note updated, triggering GitHub workflow...');
 
   try {
-    const releaseNote = await db
-      .query(RELEASE_NOTES_UID)
-      .findOne({
-        where,
-        select: ['dirName'],
-      });
+    let releaseNotes: any[] = [];
+    // @ts-ignore
+    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
+      releaseNotes = await db.query(RELEASE_NOTES_UID).findMany({ where, select: ['dirName'] });
+    } else {
+      const releaseNote = await db.query(RELEASE_NOTES_UID).findOne({ where, select: ['dirName'] });
+      if (releaseNote) releaseNotes = [releaseNote];
+    }
 
-    if (!releaseNote || !releaseNote.dirName) {
+    if (releaseNotes.length === 0) {
+      throw new Error('No release notes found, triggering full sync');
+    }
+
+    const dirNames = releaseNotes
+      .map(n => n.dirName)
+      .filter((dirName): dirName is string => Boolean(dirName));
+
+    const uniqueDirNames = Array.from(new Set(dirNames));
+
+    if (uniqueDirNames.length === 0) {
       throw new Error('No dirName found for release note, triggering full sync');
     }
 
-    console.log(`Syncing release note directory: ${releaseNote.dirName}`);
-    triggerGithubWorkflow('release-notes', [releaseNote.dirName]).catch((error) =>
+    console.log(`Syncing release note directory: ${uniqueDirNames.join(', ')}`);
+    triggerGithubWorkflow('release-notes', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
