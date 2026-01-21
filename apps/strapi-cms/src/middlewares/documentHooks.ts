@@ -295,7 +295,6 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
     }
 
     console.log(`Syncing solution directory: ${uniqueDirNames.join(', ')}`);
-    // @ts-ignore
     triggerGithubWorkflow('solutions', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
@@ -352,7 +351,6 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
     }
 
     console.log(`Syncing release note directory: ${uniqueDirNames.join(', ')}`);
-    // @ts-ignore
     triggerGithubWorkflow('release-notes', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
