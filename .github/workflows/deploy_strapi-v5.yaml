@@ -25,7 +25,7 @@ jobs:
     name: Build and push CMS image (manual trigger)
     runs-on: ubuntu-latest
     continue-on-error: false
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
@@ -72,7 +72,7 @@ jobs:
         with:
            task-definition: apps/strapi-cms/task-definition.json
            container-name: cms-docker
-           image: ${{ steps.login-ecr.outputs.registry }}/strapi:${{ github.sha }}
+           image: ${{ steps.login-ecr.outputs.registry }}/strapi-v5:${{ github.sha }}
 
       - name: Deploy new ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@0e82244a9c6dac43d70151a94c67ebc4bab18fc5 # v2.2.0
