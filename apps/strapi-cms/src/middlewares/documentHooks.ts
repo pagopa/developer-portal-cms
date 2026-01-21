@@ -318,7 +318,7 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
 
   if (!where) {
     console.log('No release note identifier found, triggering full sync');
-    triggerGithubWorkflow('release-notes').catch((error) =>
+    triggerGithubWorkflow('release_notes').catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
     return;
@@ -351,12 +351,12 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
     }
 
     console.log(`Syncing release note directory: ${uniqueDirNames.join(', ')}`);
-    triggerGithubWorkflow('release-notes', uniqueDirNames).catch((error) =>
+    triggerGithubWorkflow('release_notes', uniqueDirNames).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
     console.error('Error fetching release note:', error);
-    triggerGithubWorkflow('release-notes').catch((innerError) =>
+    triggerGithubWorkflow('release_notes').catch((innerError) =>
       console.error('Failed to trigger workflow after update:', innerError)
     );
   }

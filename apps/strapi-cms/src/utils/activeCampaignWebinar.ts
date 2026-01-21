@@ -36,17 +36,6 @@ interface IWebinar {
   readonly publishedAt?: string;
   readonly videoOnDemandStartAt?: number;
 }
-
-interface IWebinarEvent {
-  readonly params: {
-    readonly data: IWebinar;
-    readonly where?: {
-      readonly id?: string;
-    };
-  };
-  readonly result: IWebinar;
-}
-
 const validateDates = (event: IWebinarEvent): boolean => {
   const { data } = event.params;
 
@@ -87,7 +76,7 @@ const validateSlugBeforeCreate = (event: IWebinarEvent): boolean =>
 const validateSlugBeforeUpdate = async (
   event: IWebinarEvent
 ): Promise<boolean> => {
-  const id = event.params.where?.id;
+  const id = event.params.where?.documentId;
   if (!id) {
     throw new errors.ApplicationError('Webinar id not found');
   }
