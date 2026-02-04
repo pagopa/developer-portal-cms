@@ -12,6 +12,9 @@ interface ISolutionEvent {
       readonly id?: string;
     };
   };
+  readonly result?: {
+    readonly locale?: string;
+  };
 }
 
 
@@ -52,15 +55,23 @@ module.exports = {
         throw new Error('No dirName found for solution, triggering full sync');
       }
 
+      if (!event?.result?.locale) {
+        throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+      }
+      
       console.log(`Syncing solution directory: ${solution.dirName}`);
       // Fire and forget - don't block the UI
-      triggerGithubWorkflow('solutions', [solution.dirName]).catch(error =>
+      triggerGithubWorkflow({
+        metadataType: 'solutions',
+        dirNames: [solution.dirName],
+        locale: event.result.locale
+      }).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     } catch (error) {
       console.error('Error fetching solution:', error);
       // Fallback to full sync
-      triggerGithubWorkflow('solutions').catch(error =>
+      triggerGithubWorkflow({metadataType: 'solutions', locale: 'it'}).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     }
