@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.6.1
+
+### Patch Changes
+
+- 205482f: Saving guides solutions and release notes triggers a entity specific update workflow
+
 ## 4.6.0
 
 ### Minor Changes
