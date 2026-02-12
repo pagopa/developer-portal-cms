@@ -17,6 +17,9 @@ interface IGuideEvent {
       readonly id?: string;
     };
   };
+  readonly result?: {
+    readonly locale?: string;
+  };
 }
 
 const validateGuideVersions = async (event: IGuideEvent) => {
@@ -93,6 +96,10 @@ module.exports = {
         return;
       }
 
+      if (!event?.result?.locale) {
+        throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+      }
+
       // Extract dirNames from all versions
       const dirNames = guide.versions
         .map((version: any) => version.dirName)
@@ -104,13 +111,17 @@ module.exports = {
 
       console.log(`Syncing guide directories: ${dirNames.join(', ')}`);
       // Fire and forget - don't block the UI
-      triggerGithubWorkflow('guides', dirNames).catch(error =>
+      triggerGithubWorkflow({
+        metadataType:'guides',
+        locale: event.result.locale,
+        dirNames: dirNames,
+      }).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     } catch (error) {
       console.error('Error fetching guide versions:', error);
       // Fallback to full sync
-      triggerGithubWorkflow('guides').catch(error =>
+      triggerGithubWorkflow({metadataType: 'guides', locale: 'it'}).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     }

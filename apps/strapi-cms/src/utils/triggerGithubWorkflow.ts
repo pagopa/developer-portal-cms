@@ -2,10 +2,12 @@ import axios from 'axios';
 
 type MetadataType = 'guides' | 'release_notes' | 'solutions';
 
-export const triggerGithubWorkflow = async (
+export const triggerGithubWorkflow = async (props: {
   metadataType: MetadataType,
-  dirNames?: string[]
-) => {
+  dirNames?: string[],
+  locale: string
+}) => {
+  const { metadataType, dirNames, locale } = props;
   try {
     const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
@@ -30,6 +32,7 @@ export const triggerGithubWorkflow = async (
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
           generate_root_metadata_file: 'false',
+          locale: locale,
           incremental_mode: 'true',
           dir_names_filter: dirNamesFilter,
           invalidate_opennext_cache: 'false'

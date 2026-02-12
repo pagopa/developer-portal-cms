@@ -48,15 +48,19 @@ module.exports = {
         throw new Error('No dirName found for release note, triggering full sync');
       }
 
+      if (!event?.result?.locale) {
+        throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+      }
+
       console.log(`Syncing release note directory: ${releaseNote.dirName}`);
       // Fire and forget - don't block the UI
-      triggerGithubWorkflow('release_notes', [releaseNote.dirName]).catch(error =>
+      triggerGithubWorkflow({metadataType: 'release_notes', locale: event.result?.locale, dirNames: [releaseNote.dirName]}).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     } catch (error) {
       console.error('Error fetching release note:', error);
       // Fallback to full sync
-      triggerGithubWorkflow('release_notes').catch(error =>
+      triggerGithubWorkflow({metadataType: 'release_notes', locale: 'it'}).catch(error =>
         console.error('Failed to trigger workflow after update:', error)
       );
     }
