@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.6.2
+
+### Patch Changes
+
+- f9cf964: Add locale handling to guide, release note, and solution lifecycle
+
 ## 4.6.1
 
 ### Patch Changes
