@@ -58,16 +58,3 @@ export const triggerGithubWorkflow = async (props: {
     // Don't throw the error to avoid breaking the lifecycle operation
   }
 };
-
-export const onPublishedRecordTriggerGithubWorkflow = (metadataType: MetadataType, publishedAt: string | null, unpublishing: boolean) => {
-  if (!publishedAt && !unpublishing) {
-    console.log(`${metadataType} not published, skipping GitHub workflow trigger`);
-    return;
-  }
-
-  console.log(`${metadataType} updated, triggering GitHub workflow...`);
-  // Fire and forget - don't block the UI
-  triggerGithubWorkflow(metadataType).catch(error =>
-    console.error(`Failed to trigger workflow after ${metadataType} update:`, error)
-  );
-};
