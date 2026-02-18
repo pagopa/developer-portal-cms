@@ -2,4 +2,4 @@
 "strapi-cms": minor
 ---
 
-Add redirectPath to tutorilas
+Add redirectPath to tutorials
