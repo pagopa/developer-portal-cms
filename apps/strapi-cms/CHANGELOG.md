@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.7.0
+
+### Minor Changes
+
+- 5baace1: Add redirectPath to tutorials
+
 ## 4.6.2
 
 ### Patch Changes
