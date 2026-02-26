@@ -1,5 +1,23 @@
 # strapi-cms
 
+## 4.7.0
+
+### Minor Changes
+
+- 5baace1: Add redirectPath to tutorials
+
+## 4.6.2
+
+### Patch Changes
+
+- f9cf964: Add locale handling to guide, release note, and solution lifecycle
+
+## 4.6.1
+
+### Patch Changes
+
+- 205482f: Saving guides solutions and release notes triggers a entity specific update workflow
+
 ## 4.6.0
 
 ### Minor Changes

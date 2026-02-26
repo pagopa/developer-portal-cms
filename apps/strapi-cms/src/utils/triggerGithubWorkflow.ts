@@ -2,10 +2,12 @@ import axios from 'axios';
 
 type MetadataType = 'guides' | 'release_notes' | 'solutions';
 
-export const triggerGithubWorkflow = async (
+export const triggerGithubWorkflow = async (props: {
   metadataType: MetadataType,
-  dirNames?: string[]
-) => {
+  dirNames?: string[],
+  locale: string
+}) => {
+  const { metadataType, dirNames, locale } = props;
   try {
     const githubPat = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
     if (!githubPat) {
@@ -29,6 +31,7 @@ export const triggerGithubWorkflow = async (
         inputs: {
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
+          locale: locale,
           generate_root_metadata_file: 'true',
           incremental_mode: 'true',
           dir_names_filter: dirNamesFilter,
@@ -54,17 +57,4 @@ export const triggerGithubWorkflow = async (
     console.error('Error triggering GitHub workflow:', error);
     // Don't throw the error to avoid breaking the lifecycle operation
   }
-};
-
-export const onPublishedRecordTriggerGithubWorkflow = (metadataType: MetadataType, publishedAt: string | null, unpublishing: boolean) => {
-  if (!publishedAt && !unpublishing) {
-    console.log(`${metadataType} not published, skipping GitHub workflow trigger`);
-    return;
-  }
-
-  console.log(`${metadataType} updated, triggering GitHub workflow...`);
-  // Fire and forget - don't block the UI
-  triggerGithubWorkflow(metadataType).catch(error =>
-    console.error(`Failed to trigger workflow after ${metadataType} update:`, error)
-  );
 };
