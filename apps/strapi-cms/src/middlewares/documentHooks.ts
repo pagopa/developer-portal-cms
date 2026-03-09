@@ -32,8 +32,8 @@ type BaseParams = IEventWithProduct['params'];
 
 type DocumentWhereParams =
   NonNullable<BaseParams['where']> & {
-    readonly documentId?: string;
-  };
+  readonly documentId?: string;
+};
 
 type DocumentData = BaseParams['data'] & {
   readonly id?: number | string;
@@ -42,6 +42,7 @@ type DocumentData = BaseParams['data'] & {
 
 type DocumentParams = Omit<BaseParams, 'data' | 'where'> & {
   readonly data: DocumentData;
+  readonly locale: string;
   readonly documentId?: string;
   readonly where?: DocumentWhereParams;
 };
@@ -203,11 +204,13 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
 
   if (!where) {
     console.log('No guide identifier found, triggering full sync');
-    triggerGithubWorkflow('guides').catch((error) =>
+    triggerGithubWorkflow({metadataType: 'guides',locale: context.params.locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
     return;
   }
+
+  const locale = (context.params.locale==='' || !context.params.locale) ? 'it' : context.params.locale;
 
   console.log('Guide updated, triggering GitHub workflow...');
 
@@ -238,13 +241,17 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
       throw new Error('No dirNames found in versions, triggering full sync');
     }
 
+    if (context.params.locale==='' || !context.params.locale) {
+      throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+    }
+
     console.log(`Syncing guide directories: ${uniqueDirNames.join(', ')}`);
-    triggerGithubWorkflow('guides', uniqueDirNames).catch((error) =>
+    triggerGithubWorkflow({metadataType:'guides', dirNames: uniqueDirNames, locale: locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
     console.error('Error fetching guide versions:', error);
-    triggerGithubWorkflow('guides').catch((innerError) =>
+    triggerGithubWorkflow({metadataType:'guides', locale: locale}).catch((innerError) =>
       console.error('Failed to trigger workflow after update:', innerError)
     );
   }
@@ -262,11 +269,13 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
 
   if (!where) {
     console.log('No solution identifier found, triggering full sync');
-    triggerGithubWorkflow('solutions').catch((error) =>
+    triggerGithubWorkflow({metadataType: 'solutions', locale: context.params.locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
     return;
   }
+
+  const locale = (context.params.locale==='' || !context.params.locale) ? 'it' : context.params.locale;
 
   console.log('Solution updated, triggering GitHub workflow...');
 
@@ -294,13 +303,17 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
       throw new Error('No dirName found for solution, triggering full sync');
     }
 
+    if (context.params.locale==='' || !context.params.locale) {
+      throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+    }
+
     console.log(`Syncing solution directory: ${uniqueDirNames.join(', ')}`);
-    triggerGithubWorkflow('solutions', uniqueDirNames).catch((error) =>
+    triggerGithubWorkflow({metadataType: 'solutions', dirNames: uniqueDirNames, locale: locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
     console.error('Error fetching solution:', error);
-    triggerGithubWorkflow('solutions').catch((innerError) =>
+    triggerGithubWorkflow({metadataType: 'solutions', locale: locale}).catch((innerError) =>
       console.error('Failed to trigger workflow after update:', innerError)
     );
   }
@@ -318,11 +331,13 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
 
   if (!where) {
     console.log('No release note identifier found, triggering full sync');
-    triggerGithubWorkflow('release_notes').catch((error) =>
+    triggerGithubWorkflow({metadataType: 'release_notes', locale: context.params.locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
     return;
   }
+
+  const locale = (context.params.locale==='' || !context.params.locale) ? 'it' : context.params.locale;
 
   console.log('Release note updated, triggering GitHub workflow...');
 
@@ -350,13 +365,17 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
       throw new Error('No dirName found for release note, triggering full sync');
     }
 
+    if (context.params.locale==='' || !context.params.locale) {
+      throw new Error('No locale found in event result, triggering full sync with default locale "it"');
+    }
+
     console.log(`Syncing release note directory: ${uniqueDirNames.join(', ')}`);
-    triggerGithubWorkflow('release_notes', uniqueDirNames).catch((error) =>
+    triggerGithubWorkflow({metadataType: 'release_notes', dirNames: uniqueDirNames, locale: locale}).catch((error) =>
       console.error('Failed to trigger workflow after update:', error)
     );
   } catch (error) {
     console.error('Error fetching release note:', error);
-    triggerGithubWorkflow('release_notes').catch((innerError) =>
+    triggerGithubWorkflow({metadataType: 'release_notes', locale: locale}).catch((innerError) =>
       console.error('Failed to trigger workflow after update:', innerError)
     );
   }

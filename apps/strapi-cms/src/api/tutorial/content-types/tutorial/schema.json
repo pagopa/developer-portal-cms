@@ -36,6 +36,14 @@
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
+    "redirectPath": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "image": {
       "type": "media",
       "pluginOptions": {

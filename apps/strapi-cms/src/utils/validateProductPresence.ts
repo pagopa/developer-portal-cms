@@ -20,6 +20,9 @@ export interface IEventWithProduct {
       readonly id?: string;
     };
   };
+  readonly result?: {
+    readonly locale?: string;
+  };
 }
 
 export const validateAssociatedProductPresenceOnUpdate = (
