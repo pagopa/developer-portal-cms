@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 4.7.1
+
+### Patch Changes
+
+- 57f1f8d: Allow same name or slug for product of different languages.
+
 ## 4.7.0
 
 ### Minor Changes
