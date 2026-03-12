@@ -9,8 +9,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  ENVIRONMENT: dev
 
 defaults:
   run:
@@ -24,14 +22,9 @@ permissions:
 jobs:
 
   manual_deploy:
-    name: Build and push CMS image (manual trigger) - ($ENVIRONMENT)
+    name: Build and push CMS image (manual trigger)
     runs-on: ubuntu-latest
     continue-on-error: false
-    environment: $ENVIRONMENT
-
-    concurrency:
-      group: ${{ github.workflow }}-$env.ENVIRONMENT
-      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -41,7 +34,7 @@ jobs:
         uses: ./.github/actions/configure-aws-credentials
         with:
           aws_region: ${{ env.AWS_REGION || 'eu-south-1' }}
-          role_to_assume: GitHubActionDeployCmsV5
+          role_to_assume: arn:aws:iam::039804388894:role/GitHubActionDeployCmsV5
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -54,7 +47,7 @@ jobs:
         # Registry (ECR). However, by activating this option, the deployment
         # process will proceed to the next steps even if the ECR image already
         # exists
-        continue-on-error: true
+        continue-on-error: false
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         env:
           ECR_REGISTRY: 039804388894.dkr.ecr.eu-south-1.amazonaws.com
@@ -67,7 +60,11 @@ jobs:
             provenance: false
 
       - name: Generate task-definition file
-        run: aws ecs describe-task-definition --task-definition cms-task-def --query taskDefinition > task-definition.json
+        shell: bash
+        run: |
+          aws ecs describe-task-definition \
+          --task-definition cms-task-def-v5 \
+          --query taskDefinition > task-definition.json
 
       - name: Update ImageTag in task-definition
         id: task-def
@@ -75,7 +72,7 @@ jobs:
         with:
            task-definition: apps/strapi-cms/task-definition.json
            container-name: cms-docker
-           image: ${{ steps.login-ecr.outputs.registry }}/strapi:${{ github.sha }}
+           image: ${{ steps.login-ecr.outputs.registry }}/strapi-v5:${{ github.sha }}
 
       - name: Deploy new ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@0e82244a9c6dac43d70151a94c67ebc4bab18fc5 # v2.2.0
