@@ -31,8 +31,8 @@ export const triggerGithubWorkflow = async (props: {
         inputs: {
           environment: process.env.GITHUB_WORKFLOW_ENV || 'dev',
           metadata_type: metadataType,
+          generate_root_metadata_file: 'false',
           locale: locale,
-          generate_root_metadata_file: 'true',
           incremental_mode: 'true',
           dir_names_filter: dirNamesFilter,
           invalidate_opennext_cache: 'false'
