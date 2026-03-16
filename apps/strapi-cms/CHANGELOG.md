@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 5.0.0
+
+### Major Changes
+
+- c620f83: Sync trigger will not generate root metadata file
+
 ## 4.7.1
 
 ### Patch Changes
