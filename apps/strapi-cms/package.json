@@ -16,6 +16,9 @@
     "prune:strapi": "turbo prune --scope=strapi-cms --docker && mv -f ../../out/package-lock.json . && rm -R ../../out/"
   },
   "dependencies": {
+    "@strapi/admin": "5.38.0",
+    "@strapi/design-system": "2.2.0",
+    "@strapi/icons": "2.2.0",
     "@_sh/strapi-plugin-ckeditor": "^6.0.3",
     "@strapi-community/plugin-seo": "^2.1.1",
     "@strapi/plugin-users-permissions": "5.38.0",
@@ -43,5 +46,10 @@
     "node": "22.21.1",
     "npm": "10.9.4"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "styled-components": "^6.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
