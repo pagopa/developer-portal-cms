@@ -8,11 +8,10 @@
   "attributes": {
     "content": {
       "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
       "options": {
-        "output": "HTML",
-        "preset": "standard"
-      },
-      "customField": "plugin::ckeditor.CKEditor"
+        "preset": "defaultHtml"
+      }
     }
   }
 }
