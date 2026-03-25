@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_webinar_chapters",
+  "info": {
+    "displayName": "chapter",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "regex": "^[a-zA-Z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "startTime": {
+      "type": "string",
+      "required": true,
+      "regex": "^(\\d{2,}:)?[0-5]\\d:[0-5]\\d\\.\\d{3}$",
+      "default": "00:00:00.000"
+    },
+    "endTime": {
+      "type": "string",
+      "required": true,
+      "regex": "^(\\d{2,}:)?[0-5]\\d:[0-5]\\d\\.\\d{3}$",
+      "default": "00:00:00.000"
+    }
+  }
+}
