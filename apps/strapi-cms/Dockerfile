@@ -15,8 +15,6 @@ RUN rm -rf .cache .strapi dist build node_modules
 ENV NODE_ENV=production
 RUN npm run build
 
-RUN npm prune --omit=dev
-
 # Creating final production image
 FROM ${NODE_IMAGE} AS buildfinal
 RUN apk add --no-cache vips-dev
