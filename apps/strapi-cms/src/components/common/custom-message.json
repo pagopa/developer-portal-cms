@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_common_custom_messages",
+  "info": {
+    "displayName": "CustomMessage",
+    "icon": "file",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "value": {
+      "type": "blocks"
+    }
+  }
+}
