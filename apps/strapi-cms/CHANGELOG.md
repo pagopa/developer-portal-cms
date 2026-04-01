@@ -1,5 +1,18 @@
 # strapi-cms
 
+## 5.1.1
+
+### Patch Changes
+
+- 2560a59: Trigger GitHub workflow on different commit based on environment
+
+## 5.1.0
+
+### Minor Changes
+
+- e123cae: Add customMessagesMap single type and add showGuidesTranslationDisclaimer flag to guideVersion component
+- 9e33702: Add chapters to webinar and chapter component
+
 ## 5.0.0
 
 ### Major Changes
