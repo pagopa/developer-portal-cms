@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "custom_messages_maps",
+  "info": {
+    "singularName": "custom-messages-map",
+    "pluralName": "custom-messages-maps",
+    "displayName": "CustomMessagesMap"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "customMessages": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "common.custom-message"
+    }
+  }
+}
