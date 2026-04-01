@@ -25,7 +25,7 @@ export const triggerGithubWorkflow = async (props: {
     }
 
     const env = process.env.GITHUB_WORKFLOW_ENV || 'dev';
-    const ref = env != 'dev' ? `nextjs-website@latest-deployed-in-${env}` : 'main'
+    const ref = env !== 'dev' ? `nextjs-website@latest-deployed-in-${env}` : 'main'
     const response = await axios.post(
       'https://api.github.com/repos/pagopa/developer-portal/actions/workflows/sync_gitbook_docs.yaml/dispatches',
       {
