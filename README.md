@@ -4,8 +4,8 @@ In this repository you can find anything you need to work on the developer porta
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/docs/latest-v18.x/api/index.html)
-- [npm CLI](https://docs.npmjs.com/cli/v9)
+- [Node.js](https://nodejs.org/docs/v22.21.1/api/)
+- [npm CLI](https://docs.npmjs.com/cli/v10)
 
 ## Local development
 Remove UPLOAD_PLUGIN_PROVIDER=strapi-provider-upload-custom from the .env file if it is present, otherwise the local strapi-cms will not start.
