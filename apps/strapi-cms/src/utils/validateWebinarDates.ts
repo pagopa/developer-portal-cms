@@ -10,6 +10,7 @@ export interface IWebinarEvent {
       readonly startDatetime?: string;
       readonly endDatetime?: string;
       readonly publishedAt?: string;
+      readonly documentId?: string;
     };
     readonly where?: {
       readonly documentId?: string;
