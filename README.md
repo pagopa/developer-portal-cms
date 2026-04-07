@@ -8,6 +8,7 @@ In this repository you can find anything you need to work on the developer porta
 - [npm CLI](https://docs.npmjs.com/cli/v9)
 
 ## Local development
+Remove UPLOAD_PLUGIN_PROVIDER=strapi-provider-upload-custom from the .env file if it is present, otherwise the local strapi-cms will not start.
 
 (Optional) First time set-up project or when there are changes to strapi collection:
 ```bash
