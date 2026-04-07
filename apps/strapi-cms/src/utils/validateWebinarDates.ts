@@ -15,6 +15,7 @@ export interface IWebinarEvent {
     readonly where?: {
       readonly documentId?: string;
     };
+    readonly documentId?: string;
   };
   readonly result?: {
     readonly id?: string;

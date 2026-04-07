@@ -25,7 +25,8 @@ export const validateSlugBeforeCreate = (event: IWebinarEvent): boolean =>
 export const validateSlugBeforeUpdate = async (
   event: IWebinarEvent
 ): Promise<boolean> => {
-  const documentId = event.params.data.documentId;
+  // documentId can be present either in event.params or event.params.data based on how the update is triggered
+  const documentId = event.params.data.documentId || event.params.documentId;
   if (!documentId) {
     throw new errors.ApplicationError('Webinar documentId not found');
   }
