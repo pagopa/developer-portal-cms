@@ -1,9 +1,9 @@
 # Default owners
-* @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @tommaso1 @MarBert
+* @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
 
 # CMS
-apps/strapi-cms/ @MarcoPonchia @marcobottaro @tommaso1 @MarBert
-packages/strapi-provider-upload-custom/ @MarcoPonchia @marcobottaro @tommaso1 @MarBert
+apps/strapi-cms/ @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
+packages/strapi-provider-upload-custom/ @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
 
 .changeset/README.md @pagopa/devportal-maintain
 .changeset/config.json @pagopa/devportal-maintain
@@ -12,6 +12,6 @@ packages/strapi-provider-upload-custom/ @MarcoPonchia @marcobottaro @tommaso1 @M
 .changeset/*
 
 # Required to merge Push next releases PR
-package-lock.json @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @tommaso1 @MarBert
-**/package.json @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @tommaso1 @MarBert
-**/CHANGELOG.md @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @tommaso1 @MarBert
+package-lock.json @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
+**/package.json @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
+**/CHANGELOG.md @pagopa/devportal-maintain @MarcoPonchia @marcobottaro @Sebastiano-Bertolin @MarBert
