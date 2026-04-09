@@ -1,4 +1,5 @@
 name: Deploy CMS
+run-name: Deploy CMS to ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }}
 
 on:
   push:
