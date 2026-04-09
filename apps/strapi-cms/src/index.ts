@@ -12,9 +12,9 @@ import {
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
 } from './utils/validateProductPresence';
-import {validateWebinarDates} from "./utils/validateWebinarDates";
-import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from "./utils/validateWebinarSlug";
-import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from "./utils/activeCampaignWebinar";
+import {validateWebinarDates} from './utils/validateWebinarDates';
+import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from './utils/validateWebinarSlug';
+import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from './utils/activeCampaignWebinar';
 
 export default {
 // @ts-ignore
