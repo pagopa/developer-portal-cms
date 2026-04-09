@@ -8,19 +8,6 @@ export const GUIDES_UID = 'api::guide.guide';
 export const RELEASE_NOTES_UID = 'api::release-note.release-note';
 export const SOLUTIONS_UID = 'api::solution.solution';
 
-export const entitiesRequiringProductAssociation = [
-  'api::use-case-list-page.use-case-list-page',
-  'api::use-case.use-case',
-  'api::tutorial-list-page.tutorial-list-page',
-  'api::tutorial.tutorial',
-  'api::quickstart-guide.quickstart-guide',
-  'api::overview.overview',
-  'api::guide-list-page.guide-list-page',
-  'api::api-data-list-page.api-data-list-page',
-  'api::api-data.api-data',
-  RELEASE_NOTES_UID,
-];
-
 type EntryWhereClause =
   | { readonly id: number | string }
   | { readonly id: { readonly $in: ReadonlyArray<number | string> } }

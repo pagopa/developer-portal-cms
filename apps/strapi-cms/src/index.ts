@@ -1,5 +1,4 @@
 import {
-  entitiesRequiringProductAssociation,
   GUIDES_UID,
   IGuideData,
   RELEASE_NOTES_UID,
@@ -9,9 +8,10 @@ import {
   validateGuideVersions
 } from './middlewares/documentHooks';
 import {
+  entitiesRequiringProductAssociation,
   validateAssociatedProductPresenceOnCreate,
   validateAssociatedProductPresenceOnUpdate
-} from "./utils/validateProductPresence";
+} from './utils/validateProductPresence';
 import {validateWebinarDates} from "./utils/validateWebinarDates";
 import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from "./utils/validateWebinarSlug";
 import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from "./utils/activeCampaignWebinar";
@@ -24,7 +24,7 @@ export default {
       console.warn('Document service middleware unavailable - skipping custom document hooks');
       return;
     }
-// @ts-ignore
+    // @ts-ignore
     strapi.documents.use(async (context, next) => {
       if (entitiesRequiringProductAssociation.includes(context.uid)) {
         if (context.action === 'create') {
