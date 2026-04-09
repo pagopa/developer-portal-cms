@@ -27,16 +27,16 @@
     },
     "coverImage": {
       "type": "media",
-      "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "slug": {
       "type": "string",
@@ -46,8 +46,8 @@
         }
       },
       "required": true,
-      "regex": "^[a-zA-Z0-9-]+$",
-      "unique": true
+      "unique": true,
+      "regex": "^[a-zA-Z0-9-]+$"
     },
     "bodyContent": {
       "type": "blocks",
@@ -67,13 +67,13 @@
     },
     "videoOnDemandStartAt": {
       "type": "integer",
-      "default": 0,
-      "min": 0,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "default": 0,
+      "min": 0
     },
     "startDatetime": {
       "type": "datetime",
@@ -108,13 +108,13 @@
     },
     "relatedLinks": {
       "type": "component",
-      "repeatable": false,
-      "component": "common.related-links",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "common.related-links",
+      "repeatable": false
     },
     "subscribeParagraphLabel": {
       "type": "string",
@@ -125,12 +125,12 @@
       }
     },
     "description": {
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "text",
       "required": true
     },
     "solutions": {
@@ -141,33 +141,33 @@
     },
     "questionsAndAnswers": {
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "common.question-and-answer"
+      "component": "common.question-and-answer",
+      "repeatable": true
     },
     "relatedResources": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "webinar.related-resources"
+      "component": "webinar.related-resources",
+      "repeatable": false
     },
     "seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false
     },
     "webinarCategory": {
       "type": "relation",
@@ -176,39 +176,39 @@
     },
     "headerImage": {
       "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "playerCoverImage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "chapters": {
-      "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "webinar.chapter"
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "playerCoverImage": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "chapters": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "webinar.chapter",
+      "repeatable": true
     }
   }
 }
