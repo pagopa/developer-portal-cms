@@ -75,7 +75,6 @@ export default {
       if (context.uid === 'api::webinar.webinar' && context.action === 'create') {
         await createActiveCampaignList({
           params: context.params,
-          result: await next(),
         });
       }
 
