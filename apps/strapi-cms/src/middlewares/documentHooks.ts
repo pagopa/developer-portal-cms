@@ -7,20 +7,6 @@ import {
 export const GUIDES_UID = 'api::guide.guide';
 export const RELEASE_NOTES_UID = 'api::release-note.release-note';
 export const SOLUTIONS_UID = 'api::solution.solution';
-const GUIDE_VERSION_TABLE = 'components_common_guide_versions';
-
-export const entitiesRequiringProductAssociation = [
-  'api::use-case-list-page.use-case-list-page',
-  'api::use-case.use-case',
-  'api::tutorial-list-page.tutorial-list-page',
-  'api::tutorial.tutorial',
-  'api::quickstart-guide.quickstart-guide',
-  'api::overview.overview',
-  'api::guide-list-page.guide-list-page',
-  'api::api-data-list-page.api-data-list-page',
-  'api::api-data.api-data',
-  RELEASE_NOTES_UID,
-];
 
 type EntryWhereClause =
   | { readonly id: number | string }
@@ -56,7 +42,9 @@ export interface DocumentMiddlewareContext extends IEventWithProduct {
 }
 
 interface IGuideVersionInput {
-  readonly id?: number | string;
+  readonly main?: boolean;
+  readonly dirName?: string;
+  readonly version?: string;
 }
 
 export interface IGuideData {
@@ -158,25 +146,16 @@ export const validateGuideVersions = async (strapi: Strapi, data?: IGuideData) =
     return;
   }
 
-  if (!data?.versions?.length) {
-    return;
+  if (!data?.versions?.length || data.versions.length <= 0) {
+    throw new errors.ApplicationError(
+      'A guide must have at least one version'
+    );
   }
 
-  const versionIds = data.versions
-    .map((version) => parseNumericId(version.id))
-    .filter((id): id is number => typeof id === 'number');
+  const versions = data.versions
 
-  if (versionIds.length === 0) {
-    return;
-  }
-
-  const versions = await strapi.db.connection
-    .select('*')
-    .from(GUIDE_VERSION_TABLE)
-    .whereIn('id', versionIds);
-
-  const mainVersions = versions.filter((version: Record<string, unknown>) =>
-    Boolean(version.main)
+  const mainVersions = versions.filter((v =>
+    Boolean(v.main))
   );
 
   if (mainVersions.length === 0) {
