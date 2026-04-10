@@ -1,5 +1,33 @@
 # strapi-cms
 
+## 6.0.0
+
+### Major Changes
+
+- 6445836: Update strapi 4 to strapi 5
+
+### Minor Changes
+
+- d6aa277: Support for bulk operations
+- d24f8f2: Add locale management to documentHooks
+- 9908fd2: Switch to middleware for solution lifecycles
+- 9f5ec91: Switch from lifecycles to middleware for entities requiring product presence validation
+- 45c7bf2: Fix mergin issues with main for release-notes
+- abd89f2: Remove strapi-provider-upload-custom plugin
+- 9f5f213: Switch to middleware for release note
+
+### Patch Changes
+
+- 4ca51cc: Upgrade Strapi and Koa dependencies; update README and clean command for local setup
+- 70cd9e2: Remove second next() call when webinars are created
+- 0ea34c3: Update guides validation to only allow guides with at least 1 version
+- 241a63e: Migrating guides solutions an release notes logic from strapi v4 lifecycles to strapi 5 middleware
+- d532034: Fix to webinar validation
+- 0ec2387: Update strapi 5 to 5.33.3
+- 3966f2a: Fix webinar documentId retrieval in validation functions
+- bf2402f: refactor(webinar): implement validation and Active Campaign integration for webinars
+- c439e21: Update strapi 5 version to fix issue with SEO plugin
+
 ## 5.1.1
 
 ### Patch Changes
