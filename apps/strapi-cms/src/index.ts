@@ -15,6 +15,10 @@ import {
 import {validateWebinarDates} from './utils/validateWebinarDates';
 import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from './utils/validateWebinarSlug';
 import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from './utils/activeCampaignWebinar';
+import {
+  validateQuickstartGuideItemsPresenceOnCreate,
+  validateQuickstartGuideItemsPresenceOnUpdate
+} from "./utils/validateQuickstartGuide";
 
 export default {
 // @ts-ignore
@@ -78,6 +82,13 @@ export default {
         });
       }
 
+      if (context.uid === 'api::quickstart-guide.quickstart-guide'){
+        if(context.action === 'create') {
+          validateQuickstartGuideItemsPresenceOnCreate(context)
+        }
+        else if (context.action === 'update') {
+        await validateQuickstartGuideItemsPresenceOnUpdate(context);
+      }}
       return next();
     });
   },
