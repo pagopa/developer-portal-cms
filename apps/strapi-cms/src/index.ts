@@ -86,9 +86,10 @@ export default {
         if(context.action === 'create') {
           validateQuickstartGuideItemsPresenceOnCreate(context)
         }
-        else if (context.action === 'update') {
-        await validateQuickstartGuideItemsPresenceOnUpdate(context);
-      }}
+        else if (context.action === 'update' || context.action === 'publish') {
+          await validateQuickstartGuideItemsPresenceOnUpdate(context);
+        }
+      }
       return next();
     });
   },

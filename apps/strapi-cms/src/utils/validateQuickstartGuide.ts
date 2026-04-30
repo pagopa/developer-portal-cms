@@ -10,6 +10,7 @@ export interface IQuickstartGuideEvent {
       };
     };
     readonly documentId?: string;
+    readonly locale?: string;
   };
 }
 
@@ -31,7 +32,8 @@ export const validateQuickstartGuideItemsPresenceOnCreate = (event: IQuickstartG
 };
 
 export const validateQuickstartGuideItemsPresenceOnUpdate = async (event: IQuickstartGuideEvent) => {
-  const documentId = event.params.data.documentId || event.params.documentId;
+  const documentId = event.params.data?.documentId || event.params.documentId;
+  const locale = event.params.locale;
 
   if (!documentId) {
     throw new errors.ApplicationError('QuickstartGuide documentId not found');
@@ -48,7 +50,7 @@ export const validateQuickstartGuideItemsPresenceOnUpdate = async (event: IQuick
     throw new errors.ApplicationError('QuickstartGuide not found');
   }
 
-  const items = event.params.data.quickstartGuideItems;
+  const items = event.params.data?.quickstartGuideItems;
   const connectLength = items?.connect?.length || 0;
   const disconnectLength = items?.disconnect?.length || 0;
   const currentLength = foundQuickstartGuide.quickstartGuideItems?.length || 0;
