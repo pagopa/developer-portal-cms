@@ -198,15 +198,23 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
 
     // @ts-ignore
     if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      guides = await db.query(GUIDES_UID).findMany({ where, populate: ['versions'] });
+      guides = await db.query(GUIDES_UID).findMany({where: {...where, locale, published_at: null}, populate: ['product','versions']});
     } else {
-      const guide = await db.query(GUIDES_UID).findOne({ where, populate: ['versions'] });
+      const guide = await db.query(GUIDES_UID).findOne({ where: { ...where, locale, published_at: null }, populate: ['product','versions'] });
       if (guide) guides = [guide];
     }
 
     if (guides.length === 0) {
       throw new Error('No guides found, triggering full sync');
     }
+
+    guides.map((guide) => {
+      console.log(`==== GUIDE id ${guide.id} ====`);
+      console.log('documentId: ', guide.documentId);
+      console.log('slug: ', guide.slug);
+      console.log('product slug: ', guide.product?.slug);
+      console.log('guide: ', JSON.stringify(guide));
+    });
 
     const dirNames = guides.flatMap(guide =>
       (guide.versions || [])
@@ -262,15 +270,28 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
     let solutions: any[] = [];
     // @ts-ignore
     if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      solutions = await db.query(SOLUTIONS_UID).findMany({ where, select: ['dirName'] });
+      solutions = await db.query(SOLUTIONS_UID).findMany({
+        where: {...where, locale, published_at: null},
+        select: ['id', 'documentId', 'slug', 'dirName']
+      });
     } else {
-      const solution = await db.query(SOLUTIONS_UID).findOne({ where, select: ['dirName'] });
+      const solution = await db.query(SOLUTIONS_UID).findOne({
+        where: {...where, locale, published_at: null},
+        select: ['id', 'documentId', 'slug', 'dirName']
+      });
       if (solution) solutions = [solution];
     }
 
     if (solutions.length === 0) {
       throw new Error('No solutions found, triggering full sync');
     }
+
+    solutions.map((solution) => {
+      console.log(`==== SOLUTION id ${solution.id} ====`);
+      console.log('documentId: ', solution.documentId);
+      console.log('slug: ', solution.slug);
+      console.log('dirName: ', solution.dirName);
+    });
 
     const dirNames = solutions
       .map(s => s.dirName)
@@ -324,15 +345,30 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
     let releaseNotes: any[] = [];
     // @ts-ignore
     if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      releaseNotes = await db.query(RELEASE_NOTES_UID).findMany({ where, select: ['dirName'] });
+      releaseNotes = await db.query(RELEASE_NOTES_UID).findMany({
+        where: {...where, locale, published_at: null},
+        populate: ['product'],
+        select: ['id', 'documentId', 'dirName', 'title']
+      });
     } else {
-      const releaseNote = await db.query(RELEASE_NOTES_UID).findOne({ where, select: ['dirName'] });
+      const releaseNote = await db.query(RELEASE_NOTES_UID).findOne({
+        where: {...where, locale, published_at: null},
+        populate: ['product'],
+        select: ['id', 'documentId', 'dirName', 'title']
+      });
       if (releaseNote) releaseNotes = [releaseNote];
     }
 
     if (releaseNotes.length === 0) {
       throw new Error('No release notes found, triggering full sync');
     }
+
+    releaseNotes.map((releaseNote) => {
+      console.log(`==== RELEASE NOTE ${releaseNote.id} ====`);
+      console.log('documentId: ', releaseNote.documentId);
+      console.log('dirName: ', releaseNote.dirName);
+      console.log('dirName: ', releaseNote.product?.slug);
+    });
 
     const dirNames = releaseNotes
       .map(n => n.dirName)
