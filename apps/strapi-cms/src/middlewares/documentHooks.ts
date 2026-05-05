@@ -367,7 +367,7 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
       console.log(`==== RELEASE NOTE ${releaseNote.id} ====`);
       console.log('documentId: ', releaseNote.documentId);
       console.log('dirName: ', releaseNote.dirName);
-      console.log('dirName: ', releaseNote.product?.slug);
+      console.log('product slug: ', releaseNote.product?.slug);
     });
 
     const dirNames = releaseNotes
