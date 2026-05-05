@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 6.0.1
+
+### Patch Changes
+
+- 58b93a6: Refactor documentHooks.ts to enhance query logic and add debug logging
+
 ## 6.0.0
 
 ### Major Changes
