@@ -194,21 +194,18 @@ export const triggerGuideWorkflow = async (strapi: Strapi, context: DocumentMidd
   console.log('Guide updated, triggering GitHub workflow...');
 
   try {
-    let guides: any[] = [];
-
-    // @ts-ignore
-    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      guides = await db.query(GUIDES_UID).findMany({where: {...where, locale, published_at: null}, populate: ['product','versions']});
-    } else {
-      const guide = await db.query(GUIDES_UID).findOne({ where: { ...where, locale, published_at: null }, populate: ['product','versions'] });
-      if (guide) guides = [guide];
-    }
+    const guides: any[] = await strapi.documents(GUIDES_UID).findMany({
+      filters: where,
+      locale,
+      status: context.action === 'publish' ? 'draft' : 'published',
+      populate: ['product', 'versions']
+    });
 
     if (guides.length === 0) {
       throw new Error('No guides found, triggering full sync');
     }
 
-    guides.map((guide) => {
+    guides.forEach((guide) => {
       console.log(`==== GUIDE id ${guide.id} ====`);
       console.log('documentId: ', guide.documentId);
       console.log('slug: ', guide.slug);
@@ -267,26 +264,18 @@ export const triggerSolutionWorkflow = async (strapi: Strapi, context: DocumentM
   console.log('Solution updated, triggering GitHub workflow...');
 
   try {
-    let solutions: any[] = [];
-    // @ts-ignore
-    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      solutions = await db.query(SOLUTIONS_UID).findMany({
-        where: {...where, locale, published_at: null},
-        select: ['id', 'documentId', 'slug', 'dirName']
-      });
-    } else {
-      const solution = await db.query(SOLUTIONS_UID).findOne({
-        where: {...where, locale, published_at: null},
-        select: ['id', 'documentId', 'slug', 'dirName']
-      });
-      if (solution) solutions = [solution];
-    }
+    const solutions: any[] = await strapi.documents(SOLUTIONS_UID).findMany({
+      filters: where,
+      locale,
+      status: context.action === 'publish' ? 'draft' : 'published',
+      fields: ['id', 'documentId', 'slug', 'dirName']
+    });
 
     if (solutions.length === 0) {
       throw new Error('No solutions found, triggering full sync');
     }
 
-    solutions.map((solution) => {
+    solutions.forEach((solution) => {
       console.log(`==== SOLUTION id ${solution.id} ====`);
       console.log('documentId: ', solution.documentId);
       console.log('slug: ', solution.slug);
@@ -342,28 +331,19 @@ export const triggerReleaseNoteWorkflow = async (strapi: Strapi, context: Docume
   console.log('Release note updated, triggering GitHub workflow...');
 
   try {
-    let releaseNotes: any[] = [];
-    // @ts-ignore
-    if ((where.id && where.id['$in']) || (where.documentId && where.documentId['$in'])) {
-      releaseNotes = await db.query(RELEASE_NOTES_UID).findMany({
-        where: {...where, locale, published_at: null},
-        populate: ['product'],
-        select: ['id', 'documentId', 'dirName', 'title']
-      });
-    } else {
-      const releaseNote = await db.query(RELEASE_NOTES_UID).findOne({
-        where: {...where, locale, published_at: null},
-        populate: ['product'],
-        select: ['id', 'documentId', 'dirName', 'title']
-      });
-      if (releaseNote) releaseNotes = [releaseNote];
-    }
+    const releaseNotes: any[] = await strapi.documents(RELEASE_NOTES_UID).findMany({
+      filters: where,
+      locale,
+      status: context.action === 'publish' ? 'draft' : 'published',
+      populate: ['product'],
+      fields: ['id', 'documentId', 'dirName', 'title']
+    });
 
     if (releaseNotes.length === 0) {
       throw new Error('No release notes found, triggering full sync');
     }
 
-    releaseNotes.map((releaseNote) => {
+    releaseNotes.forEach((releaseNote) => {
       console.log(`==== RELEASE NOTE ${releaseNote.id} ====`);
       console.log('documentId: ', releaseNote.documentId);
       console.log('dirName: ', releaseNote.dirName);
