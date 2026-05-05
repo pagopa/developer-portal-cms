@@ -42,7 +42,10 @@ export const validateQuickstartGuideItemsPresenceOnUpdate = async (event: IQuick
   const foundQuickstartGuide = await strapi.db
     .query('api::quickstart-guide.quickstart-guide')
     .findOne({
-      where: { documentId },
+      where: {
+        documentId,
+        ...(locale ? { locale } : {}),
+      },
       populate: ['quickstartGuideItems'],
     });
 
