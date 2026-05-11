@@ -90,7 +90,8 @@ WHERE components_common_guide_versions.id = new_paths.cmp_id;
 
 -- Update dir_name of solutions
 UPDATE solutions
-SET dir_name = 'solutions/' || slug;
+SET dir_name = 'solutions/' || slug
+WHERE slug IS NOT NULL AND slug <> '';
 
 -- Update dir_name of release notes
 WITH new_dir_names AS (
@@ -100,6 +101,7 @@ WITH new_dir_names AS (
     FROM release_notes rn
     JOIN products_release_note_lnk prnl ON prnl.release_note_id = rn.id
     JOIN products p ON prnl.product_id = p.id
+    WHERE p.slug IS NOT NULL AND p.slug <> ''
 )
 UPDATE release_notes rn
 SET dir_name = new_dir_names.generated_dir_name
