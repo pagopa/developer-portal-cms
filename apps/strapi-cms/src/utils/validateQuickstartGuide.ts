@@ -12,6 +12,7 @@ export interface IQuickstartGuideEvent {
     readonly documentId?: string;
     readonly locale?: string;
   };
+  readonly action?: string;
 }
 
 export interface IQuickstartGuideItemsEvent {
@@ -39,24 +40,23 @@ export const validateQuickstartGuideItemsPresenceOnUpdate = async (event: IQuick
     throw new errors.ApplicationError('QuickstartGuide documentId not found');
   }
 
-  const foundQuickstartGuide = await strapi.db
-    .query('api::quickstart-guide.quickstart-guide')
+  const quickstartGuide = await strapi
+    .documents('api::quickstart-guide.quickstart-guide')
     .findOne({
-      where: {
-        documentId,
-        ...(locale ? { locale } : {}),
-      },
+      documentId,
+      status: event.action === 'publish' ? 'draft' : 'published',
+      ...(locale ? { locale } : {}),
       populate: ['quickstartGuideItems'],
     });
 
-  if (!foundQuickstartGuide) {
+  if (!quickstartGuide) {
     throw new errors.ApplicationError('QuickstartGuide not found');
   }
 
   const items = event.params.data?.quickstartGuideItems;
   const connectLength = items?.connect?.length || 0;
   const disconnectLength = items?.disconnect?.length || 0;
-  const currentLength = foundQuickstartGuide.quickstartGuideItems?.length || 0;
+  const currentLength = quickstartGuide.quickstartGuideItems?.length || 0;
 
   const newLength = currentLength - disconnectLength + connectLength;
 
