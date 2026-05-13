@@ -73,20 +73,20 @@ BEGIN;
 WITH new_paths AS (
     SELECT 
         c.id AS cmp_id,
-        c.dir_name AS old_dir_name,
         p.slug || '/' || g.slug || '/' || c.version AS generated_path
     FROM components_common_guide_versions c
     JOIN guides_cmps gc ON c.id = gc.cmp_id AND gc.field = 'versions'
     JOIN guides g ON gc.entity_id = g.id
     JOIN guides_product_lnk gpl ON g.id = gpl.guide_id
     JOIN products p ON gpl.product_id = p.id
-    WHERE p.slug IS NOT NULL AND p.slug <> ''
+    WHERE c.dir_name = 'QdpcBdgV6Vin3SHiZyFM'
+      AND p.slug IS NOT NULL AND p.slug <> ''
       AND g.slug IS NOT NULL AND g.slug <> ''
       AND c.version IS NOT NULL AND c.version <> ''
 )
 UPDATE components_common_guide_versions
-SET dir_name = new_paths.generated_path,
-    space_id = new_paths.old_dir_name
+SET space_id = dir_name,
+    dir_name = new_paths.generated_path
 FROM new_paths
 WHERE components_common_guide_versions.id = new_paths.cmp_id;
 
@@ -100,7 +100,6 @@ WHERE slug IS NOT NULL AND slug <> '';
 WITH new_dir_names AS (
     SELECT
         rn.id AS rn_id,
-        rn.dir_name AS old_dir_name,
     	p.slug || '/release_notes' AS generated_dir_name
     FROM release_notes rn
     JOIN products_release_note_lnk prnl ON prnl.release_note_id = rn.id
@@ -108,8 +107,8 @@ WITH new_dir_names AS (
     WHERE p.slug IS NOT NULL AND p.slug <> ''
 )
 UPDATE release_notes rn
-SET dir_name = new_dir_names.generated_dir_name,
-    space_id = new_dir_names.old_dir_name
+SET space_id = dir_name,
+    dir_name = new_dir_names.generated_dir_name,
 FROM new_dir_names
 WHERE rn.id = new_dir_names.rn_id;
 
