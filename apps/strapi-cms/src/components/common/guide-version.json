@@ -9,8 +9,8 @@
   "attributes": {
     "main": {
       "type": "boolean",
-      "default": false,
-      "required": true
+      "required": true,
+      "default": false
     },
     "dirName": {
       "type": "string",
@@ -23,6 +23,9 @@
     "showGuidesTranslationDisclaimer": {
       "type": "boolean",
       "default": false
+    },
+    "spaceId": {
+      "type": "string"
     }
   }
 }
