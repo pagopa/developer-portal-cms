@@ -79,8 +79,7 @@ WITH new_paths AS (
     JOIN guides g ON gc.entity_id = g.id
     JOIN guides_product_lnk gpl ON g.id = gpl.guide_id
     JOIN products p ON gpl.product_id = p.id
-    WHERE c.dir_name = 'QdpcBdgV6Vin3SHiZyFM'
-      AND p.slug IS NOT NULL AND p.slug <> ''
+    WHERE p.slug IS NOT NULL AND p.slug <> ''
       AND g.slug IS NOT NULL AND g.slug <> ''
       AND c.version IS NOT NULL AND c.version <> ''
 )
@@ -108,7 +107,7 @@ WITH new_dir_names AS (
 )
 UPDATE release_notes rn
 SET space_id = dir_name,
-    dir_name = new_dir_names.generated_dir_name,
+    dir_name = new_dir_names.generated_dir_name
 FROM new_dir_names
 WHERE rn.id = new_dir_names.rn_id;
 
