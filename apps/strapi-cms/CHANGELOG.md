@@ -1,5 +1,15 @@
 # strapi-cms
 
+## 6.1.0
+
+### Minor Changes
+
+- 9fc6d48: Add the spaceId field to release notes, solutions and guide versions
+
+### Patch Changes
+
+- c6c2121: Add script to update directory names in the database
+
 ## 6.0.1
 
 ### Patch Changes
