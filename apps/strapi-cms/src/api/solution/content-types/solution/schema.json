@@ -17,113 +17,111 @@
   },
   "attributes": {
     "slug": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
       "required": true,
       "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
     "icon": {
       "type": "media",
-      "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      }
+      },
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "kickerTitle": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
       "required": true
     },
     "title": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
       "required": true
     },
     "description": {
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "text"
+      }
     },
     "introductionToSteps": {
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "text"
+      }
     },
     "steps": {
-      "displayName": "SolutionStep",
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "common.solution-step",
-      "max": 4,
-      "min": 3
+      "repeatable": true,
+      "min": 3,
+      "max": 4
     },
     "dirName": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
       "required": true
     },
     "landingUseCaseFile": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
-      "required": true,
-      "default": "README.md"
+      "default": "README.md",
+      "required": true
     },
     "stats": {
-      "displayName": "SolutionStat",
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "common.solution-stat"
+      "component": "common.solution-stat",
+      "repeatable": true
     },
     "statsSource": {
+      "type": "text",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "type": "text"
+      }
     },
     "webinars": {
       "type": "relation",
@@ -138,34 +136,42 @@
     },
     "bannerLinks": {
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "component": "common.banner-link",
+      "repeatable": true,
       "max": 2
     },
     "caseHistories": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "common.case-histories"
+      "component": "common.case-histories",
+      "repeatable": false
     },
     "seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "spaceId": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }
