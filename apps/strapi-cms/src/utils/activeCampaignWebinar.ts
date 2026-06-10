@@ -48,13 +48,13 @@ export const createActiveCampaignList = async (
 ): Promise<boolean> => {
   if (
     !getActiveCampaignIntegrationIsEnabled() ||
-    !event.result?.slug ||
-    !event.result?.title
+    !event.params.data?.slug ||
+    !event.params.data?.title
   ) {
     return true;
   }
 
-  const { slug: name, title: stringid } = event.result;
+  const { slug: name, title: stringid } = event.params.data;
 
   const payload: IActiveCampaignListPayload = {
     list: {
