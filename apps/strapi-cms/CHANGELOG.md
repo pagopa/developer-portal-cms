@@ -1,5 +1,15 @@
 # strapi-cms
 
+## 6.3.0
+
+### Minor Changes
+
+- 7901bdb: Remove uniqueness constraint from slug and adjust guide schema attributes
+
+### Patch Changes
+
+- 8f5e42d: Fix Active campaign api call when creating a webinar on strapi
+
 ## 6.2.0
 
 ### Minor Changes
