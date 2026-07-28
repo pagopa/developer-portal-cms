@@ -15,10 +15,6 @@ import {
 import {validateWebinarDates} from './utils/validateWebinarDates';
 import {validateSlugBeforeCreate, validateSlugBeforeUpdate} from './utils/validateWebinarSlug';
 import {createActiveCampaignList, deleteActiveCampaignList, preventBulkDeletion} from './utils/activeCampaignWebinar';
-import {
-  validateProductUniquenessBeforeCreate,
-  validateProductUniquenessBeforeUpdate,
-} from './utils/validateProductUniqueness';
 
 export default {
 // @ts-ignore
@@ -80,16 +76,6 @@ export default {
         await createActiveCampaignList({
           params: context.params,
         });
-      }
-
-      if (context.uid === 'api::product.product') {
-        if (context.action === 'create') {
-          await validateProductUniquenessBeforeCreate(context);
-        }
-
-        if (context.action === 'update') {
-          await validateProductUniquenessBeforeUpdate(context);
-        }
       }
 
       return next();

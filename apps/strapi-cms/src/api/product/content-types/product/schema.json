@@ -24,7 +24,7 @@
       },
       "type": "string",
       "required": true,
-      "unique": false
+      "unique": true
     },
     "slug": {
       "pluginOptions": {
@@ -34,7 +34,7 @@
       },
       "type": "string",
       "required": true,
-      "unique": false,
+      "unique": true,
       "regex": "^[a-zA-Z0-9-]+$"
     },
     "shortName": {
