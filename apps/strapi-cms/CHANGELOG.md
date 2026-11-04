@@ -1,5 +1,13 @@
 # strapi-cms
 
+## 6.3.1
+
+### Patch Changes
+
+- 915e076: Allow minimum 2 boxes in product overviews
+- 6c2ef74: Prevent duplicate product names and slugs in the same locale
+- 58fd3f2: Make webinar dates mandatory
+
 ## 6.3.0
 
 ### Minor Changes
