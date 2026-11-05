@@ -1,5 +1,11 @@
 # strapi-cms
 
+## 6.4.0
+
+### Minor Changes
+
+- af92282: Update Strapi to version 5.61.0
+
 ## 6.3.1
 
 ### Patch Changes
